@@ -668,7 +668,19 @@ z = np.setdiff1d(x,y,assume_unique=True)    #find the difference of the set x an
 z = np.setxor1d(x,y,assume_unique=True)     #find the symmetric difference of the set x and set y
 ```
 **Pandas**
-```
+```py
+import pandas as pd
+
+mydataset = {'cars': ["BMW", "Volvo", "Ford"], 'passings': [3, 7, 2]}
+calories = {"day1": 420, "day2": 380, "day3": 390}
+print(pd.DataFrame(mydataset))
+print(pd.Series([1, 7, 2]))
+print(pd.Series([1, 7, 2], index = ["x", "y", "z"]))
+print(pd.Series(calories))
+print(pd.Series(calories, index = ["day1", "day2"]))
+print(pd.read_json('data.json').string())
+print(df.dropna(inplace = True).to_string())
+print(df.fillna(130, inplace = True))
 ```
 **Matplotlib**
 ```
