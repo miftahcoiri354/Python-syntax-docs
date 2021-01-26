@@ -1,6 +1,6 @@
 # **PYTHON DOCUMENTATION**
 ----
-### **Basic Syntax**
+## **Basic Syntax**
 **If Else**
 ```py
 if a > b: print("a is greater than b")
@@ -293,7 +293,7 @@ if -1 < 0: raise Exception("Sorry, no numbers below zero")
 if not type("hello") is int: raise TypeError("Only integers are allowed")
 #output: Only integers are allowed
 ```
-### **Basic Dependencies**
+## **Basic Dependencies**
 **Datetime**
 ```py
 import datetime
@@ -412,9 +412,247 @@ os.remove("demofile.txt") if os.path.exists("demofile.txt") else print("The file
 #or
 os.rmdir("myfolder")
 ```
-### **Built-in Dependencies**
+## **Built-in Dependencies**
 **NumPy**
+- How to create `array`?
+```py
+import numpy as np
+
+print(np.array([1,2,3,4,5]))
+#Output: [1 2 3 4 5]
+print(np.array([[1, 2, 3], [4, 5, 6]]))
+#Output: [[1 2 3]
+#         [4 5 6]]
+print(np.array([[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]]).ndim)
+#Output: 3
+arr = np.array([1, 2, 3, 4], ndmin=5)
+print(arr, 'number of dimensions :', arr.ndim)
+#Output: [[[[[1 2 3 4]]]]] number of dimensions : 5
+print(np.array([1,2,3,4,5][0]))
+#Output: 1
+print(np.array([[1,2,3,4,5], [6,7,8,9,10]])[1, 4])
+#Output: 10
+print(np.array([[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]])[0,1,-1])
+#Output: 6
+print(np.array([1, 2, 3, 4, 5, 6, 7])[1:5])
+#Output: [2 3 4 5]
+#use the 2 step value to return every other element from index 1 to 5
+print(np.array([1, 2, 3, 4, 5, 6, 7])[1:5:2])
+#Output: [2 4]
+print(np.array([1, 2, 3, 4, 5, 6, 7])[::2])
+#Output: [1 3 5 7]
+#select 2nd element, slice from index 1 to 4
+print(np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])[1, 1:4])
+#Output: [7 8 9]
+#from both elements return index 2
+print(np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])[0:2, 2])
+#Output: [3 8]
+print(np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])[0:2, 1:4])
+#Output: [[2 3 4]
+#         [7 8 9]]
 ```
+- numpy `datatypes`
+```py
+import numpy as np
+
+arr.dtype               #Show array datatype
+arr.astype('i')         #Convert data type into integer32
+arr.astype(int)         #Convert data type into integer
+arr.copy()              #make a copy
+arr.veiw()              #make a view
+arr.base                #show only the original array data (not a copy)
+arr.shape               #show array shape, ex.(2,4)
+arr.reshape(4,3)        #reshape array into 4 arrays with 4 elements
+arr.reshape(2,3,2)      #reshape arrays that contains 3 arrays, each with 2 elements
+arr.reshape(-1)         #reshape any dimensional array into 1 dimension array
+```
+- numpy `iterating`
+```py
+import numpy as np
+
+arr = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+for x in np.nditer(arr): print(x)
+#Output: 1 /n 2 /n 3 /n 4 /n 5 /n 6 /n 7 /n 8 
+arr = np.array([1, 2, 3])
+for x in np.nditer(arr, flags=['buffered'], op_dtypes=['S']): print(x)
+#Output  b'1' /n b'2' /n b'3'
+arr = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
+for x in np.nditer(arr[:, ::2]): print(x)
+#Output: 1 /n 3 /n 5 /n 7
+arr = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
+for idx, x in np.ndenumerate(arr): print(idx, x)
+#Output: (0, 0) 1 /n (0, 1) 2 /n (0, 2) 3 /n (0, 3) 4 /n (1, 0) 5 /n (1, 1) 6 /n (1, 2) 7 /n (1, 3) 8
+```
+- How to `join` array
+```py
+import numpy as np
+
+arr1 = np.array([1, 2, 3])
+arr2 = np.array([4, 5, 6])
+print(np.concatenate((arr1, arr2)))
+#output: [1 2 3 4 5 6]
+print(np.stack((arr1, arr2), axis=1))
+#Output: [[1 4] /n [2 5] /n [3 6]]
+print(np.hstack((arr1, arr2)))
+#Output: [1 2 3 4 5 6]
+print(np.vstack((arr1, arr2)))
+#Output: [[1 2 3] /n [4 5 6]]
+print(np.dstack((arr1, arr2)))
+#Outpur: [[[1 4] /n [2 5] /n [3 6]]]
+
+arr1 = np.array([[1, 2], [3, 4]])
+arr2 = np.array([[5, 6], [7, 8]])
+print(np.concatenate((arr1, arr2), axis=1))
+#Output: [[1 2 5 6]
+#         [3 4 7 8]]
+``` 
+- How to `Split` array
+```py
+import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5, 6])
+print(np.array_split(arr, 3))
+#Output: [array([1, 2]), array([3, 4]), array([5, 6])]
+print(np.array_split(arr, 4))
+#Output: [array([1, 2]), array([3, 4]), array([5]), array([6])]
+arr = np.array([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]])
+print(np.array_split(arr, 3))
+#Output: [array([[1, 2], /n [3, 4]]), array([[5, 6], /n [7, 8]]), array([[ 9, 10], /n [11, 12]])]
+arr = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]])
+print(np.array_split(arr, 3, axis=1)[0])
+#Output: [[ 1] /n [ 4] /n [ 7] /n [10] /n [13] /n [16]]
+print(np.hsplit(arr, 3)[0])
+#Output: [[ 1] /n [ 4] /n [ 7] /n [10] /n [13] /n [16]]
+```
+- How to `Search` array using `where` & `sort`
+```py
+imporn numpy as np
+
+arr = np.array([1, 2, 3, 4, 5, 4, 4])
+print(np.where(arr == 4))
+#Output: (array([3, 5, 6],)
+print(np.searchsorted(arr, 4))
+#output: 3
+#find location where 2, 4, 6 should be inserted
+print(np.searchsorted(arr, [2, 4, 6]))
+#Output: [1 3 7]
+print(np.sort(arr))
+#Output: [1 2 3 4 4 4 5]
+```
+- Array `filter`
+```py
+import numpy as np
+
+arr = np.array([41, 42, 43, 44])
+x = [True, False, True, False]
+print(arr[x])
+#Output: [41 43] 
+print(arr[[e > 42 for e in arr]])
+print(np.array([e for e in arr if e > 42]))
+print(arr[arr>42])
+#Output: [43 44]
+print(arr[[e%2 != 0 for e in arr]])
+print(np.array([e for e in arr if e%2 != 0]))
+print(arr[arr%2!=0])
+#Output: [41 43]
+```
+- Numpy `Random`
+```py
+from numpy import random
+
+print(random.rand())
+#Output: 0.08879971872209547
+print(random.randint(100))
+#Output: 84
+print(random.randint(100, size=(5)))
+#output: [50 34 98 72 99]
+print(random.randint(100, size=(3, 5)))
+#Output: [[90 99 11 30 34] \n [66 40 63 36 37] \n [63 35 89 51 58]]
+print(random.rand(5))
+#Output: [0.3068209 0.6654845 0.0801451 0.5297962 0.2024923]
+print(random.rand(3, 5))
+# [[0.03379952 0.78263517 0.9834899  0.47851523 0.02948659]  /n [0.36284007 0.10740884 0.58485016 0.20708396 0.00969559] /n  [0.88232193 0.86068608 0.75548749 0.61233486 0.06325663]]
+print(random.choice([3, 5, 7, 9]))
+#Output: 7
+print(random.choice([3, 5, 7, 9], size=(3, 5)))
+#Output: [[9 3 5 5 7] /n [7 5 3 3 9] /n [7 5 9 9 7]]
+print(random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6, 0.0], size=(100)))
+#output: [5 5 7 7 7 7 7 7 3 7 7 5 7 7 7 7 7 7 7 7 5 7 7 7 5 7 7 7 5 5 3 7 3 5 7 7 7 7 5 5 5 5 7 7 5 5 7 7 5 7 5 7 7 3 5 7 7 7 7 7 7 7 3 7 5 7 7 5 5 7 7 7 7 7 7 5 5 7 5 7 5 7 5 7 7 7 7 7 5 3 7 7 3 5 7 7 7 5 7 7]
+print(random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6, 0.0], size=(3, 5)))
+#Output: [[7 5 5 7 7] /n [7 7 5 7 5] /n [7 7 7 7 7]]
+print(random.shuffle(np.array([1, 2, 3, 4, 5])))
+#Output: [1 4 2 5 3]
+print(random.permutation(np.array([1, 2, 3, 4, 5])))
+#Output: [2 3 1 4 5]
+print(random.normal(size=(2, 3)))
+#Output: [[-0.3052439  -0.26798689  0.93151091] /n [ 0.9195685  -2.02267356  0.93575009]]
+print(random.normal(loc=1, scale=2, size=(2, 3)))
+#Output: [[-0.7771347   2.30661598 -0.9485032 ] /n [ 2.35435053 -0.33432257  4.55216507]]
+print(random.binomial(n=10, p=0.5, size=10))
+#Output: [2 6 4 6 6 2 5 4 6 5]
+print(random.poisson(lam=2, size=10))
+#Output: [3 1 2 6 1 4 0 1 1 3]
+print(random.uniform(size=(2, 3)))
+#Output: [[0.59990032 0.9135297  0.3339371 ] /n [0.66538481 0.3154984  0.74409155]]
+print(random.logistic(loc=1, scale=2, size=(2, 3)))
+#Output: [[ 6.48738251  6.13371248  4.36034257] /n [-1.30194629  0.52683426 -7.26991142]]
+print(random.multinomial(n=6, pvals=[1/6, 1/6, 1/6, 1/6, 1/6, 1/6]))
+#Output: [1 2 1 0 0 2]
+print(random.exponential(scale=2, size=(2, 3)))
+#Output: [[1.51501523 2.25724658 1.1959963 ] /n [0.18624084 2.34733525 0.59060865]]
+print(random.chisquare(df=2, size=(2, 3)))
+#Output: [[1.37714077 0.77221535 0.06124943] /n [4.08849272 2.95453773 0.40176353]]
+print(random.rayleigh(scale=2, size=(2, 3)))
+#Output: [[2.643053   1.57784244 2.42322763] /n [0.43488868 2.81810279 1.43561956]]
+print(random.pareto(a=2, size=(2, 3)))
+#Output: [[2.59416048 0.1073179  1.50329411] /n [2.10000817 0.09746425 0.02769927]]
+print(random.zipf(a=2, size=(2, 3)))
+#Output: [[1 1 1] /n [1 1 1]]
+```
+- Numpy `ufunc`
+```py
+import numpy as np
+
+x = [1, 2, 3, 4]
+y = [4, 5, 6, 7]
+z = np.array([x+y for x, y in zip(x,y)])
+z = np.add(x,y)                             #Sum the content of two arrays
+z = np.subtract(x, y)                       #Substracts the content of two arrays
+z = np.multiply(x, y)                       #Multiplies the content of two arrays
+z = np.multiply(z, y)                       #Divides the the values from one array with the values from another array
+z = np.power(x, y)                          #Rises the values from the first array to the power of the values of the second array
+z = np.mod(x, y)                            #return the reminder of the values in the first array corresponding to the values in the second array
+z = np.remainder(x, y)                      #return the reminder of the values in the first array corresponding to the values in the second array
+z = np.divmod(x, y)                         #return both the quotient and the mod
+z = np.absolute(x)                          #absolute operation element-wise should use absolute()
+z = np.trunc([-3.1666, 3.6667])             #return the float number closest to zero.
+z = np.fix([-3.1666, 3.6667])               #return the float number closest to zero.
+z = np.around(3.1666, 2)                    #increments preceding digit or decimal by 1 if >=5 elso do nothing
+z = np.floor([-3.1666, 3.6667])             #rounds off decimal to nearest lower integer.
+z = np.ceil([-3.1666, 3.6667])              #rounds off decimal to nearest upper integer
+z = np.log2(np.arange(1, 10))               #function to perform log at the base 2
+z = np.log10(np.arange(1, 10))              #function to perform log at the base 10
+z = np.log(np.arange(1, 10))                #perform log at the base e
+z = np.sum([x, y])                          #sum the value in y and value in y
+z = np.sum([x, y], axis=1)                  #sum the following array over 1st axis
+z = np.cumsum(x)                            #cummulative sum means partially adding the elements in array
+z = np.prod(x)                              #find the product of the elements in an array
+z = np.prod([x,y])                          #find product of the elements of two arrays
+z = np.prod([arr1, arr2], axis=1)           #perform summation in the following array over 1st axis
+z = np.cumprod(x)                           #take cummulative product of all elements for array
+z = np.diff(x)                              #compute discrete difference of the following array
+z = np.diff(x, n=2)                         #compute discrete difference of the following array twice
+z = np.lcm(4, 6)                            #(Output: 12) find Lowest Common Multiple is the least number that is common multiple of both of the numbers. 
+z = np.lcm.reduce(x)                        #lcm function each element and reduce the array by one dimension
+
+def myadd(x,y): return x+y
+myadd = np.frompyfunc(myadd, 2, 1) # 2 (number of inputs) # 1 (number of output)
+z = myadd(x,y)
+
+
+
+
+
 ```
 **Pandas**
 ```
@@ -430,7 +668,7 @@ os.rmdir("myfolder")
 ```
 -----
 # **HACKERRANK PRACTICE**
-### **1. Basic Data Types**
+## **1. Basic Data Types**
 **Input Data**
 ```python
 a = input()
