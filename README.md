@@ -613,9 +613,15 @@ print(random.zipf(a=2, size=(2, 3)))
 ```py
 import numpy as np
 
-x = [1, 2, 3, 4]
-y = [4, 5, 6, 7]
+x = np.array([1, 2, 3, 4])
+y = np.array([4, 5, 6, 7])
+
+def myadd(x,y): return x+y
+myadd = np.frompyfunc(myadd, 2, 1) # 2 (number of inputs) # 1 (number of output)
+z = myadd(x,y)
+#OR
 z = np.array([x+y for x, y in zip(x,y)])
+#OR
 z = np.add(x,y)                             #Sum the content of two arrays
 z = np.subtract(x, y)                       #Substracts the content of two arrays
 z = np.multiply(x, y)                       #Multiplies the content of two arrays
@@ -644,15 +650,22 @@ z = np.diff(x)                              #compute discrete difference of the 
 z = np.diff(x, n=2)                         #compute discrete difference of the following array twice
 z = np.lcm(4, 6)                            #(Output: 12) find Lowest Common Multiple is the least number that is common multiple of both of the numbers. 
 z = np.lcm.reduce(x)                        #lcm function each element and reduce the array by one dimension
-
-def myadd(x,y): return x+y
-myadd = np.frompyfunc(myadd, 2, 1) # 2 (number of inputs) # 1 (number of output)
-z = myadd(x,y)
-
-
-
-
-
+z = np.gcd(6, 9)                            #finding Greatest Common Denominator is the biggest number that is a common factor of both of the numbers
+z = np.gcd.reduce(x)                        #find the Highest Common Factor of all values in an array
+z = np.sin(np.pi/2)                         #find sin value of phi/2
+z = np.deg2rad(x)                           #Convert all of the array to radians (radians values are pi/180 * degree_values)
+z = np.rad2deg(x)                           #Convert all the values in following array to degrees
+z = np.arcsin(1.0)                          #find angles from values of sine, cos, tan. (arcsin = sin inverse)
+z = np.arcsin(x)                            #find the angle for all of the sine values in the array
+z = np.hypot(4, 3)                          #find the hypotenues for 4 base and 3 perpendicular
+z = np.sinh(np.pi/2)                        #find sinh value of phi/2
+z = np.cosh(arr)                            #find cosh value for all the values in arr
+z = np.arctanh(arr)                         #find the angle for all the tanh values in array
+z = np.unique(arr)                          #convert array with repeated elements to a set array
+z = np.union1d(arr1, arr2)                  #find the union values of two arrays
+z = np.intersect1d(x,y,assume_unique=True)  #find intersection of two arrays
+z = np.setdiff1d(x,y,assume_unique=True)    #find the difference of the set x and set y
+z = np.setxor1d(x,y,assume_unique=True)     #find the symmetric difference of the set x and set y
 ```
 **Pandas**
 ```
