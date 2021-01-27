@@ -680,13 +680,324 @@ print(pd.Series(calories))
 print(pd.Series(calories, index = ["day1", "day2"]))
 print(pd.read_json('data.json').string())
 print(df.dropna(inplace = True).to_string())
-print(df.fillna(130, inplace = True))
+print(df['Calories'].fillna(130, inplace = True))
+print(df["Calories"].fillna(df["Calories"].mean(), inplace = True))
+print(df["Calories"].fillna(df["Calories"].median(), inplace = True))
+print(df.duplicated())
+
+df['Date'] = pd.to_datetime(df['Date'])
+df = df.drop_duplicates(inplace = True)
+
+for x in df.index: df.loc[x, "Duration"] = 120 if df.loc[x, "Duration"] > 120
+for x in df.index: df.drop(x, inplace = True) if df.loc[x, "Duration"] > 120
 ```
 **Matplotlib**
+```py
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+colors = np.array(["red","green","blue","yellow","pink","black","orange","purple","beige","brown","gray","cyan","magenta"])
+sizes = np.array([20,50,100,200,500,1000,60,90,10,300,600,800,75])
+mylabels = ["Apples", "Bananas", "Cherries", "Dates"]
+myexplode = [0.2, 0, 0, 0]
+
+df = pd.read_csv('data.csv')
+xpoints = np.array([1, 2, 6, 8])
+ypoints = np.array([3, 8, 1, 10])
+x1 = np.array([0, 1, 2, 3])
+y1 = np.array([3, 8, 1, 10])
+x2 = np.array([0, 1, 2, 3])
+y2 = np.array([6, 2, 7, 11])
+
+df.plot()
+df.plot(kind = 'scatter', x = 'Duration', y = 'Calories')
+df["Duration"].plot(kind = 'hist')
+plt.plot(xpoints, ypoints)
+plt.plot(xpoints, ypoints, 'o')
+plt.plot(ypoints, marker = 'o')
+plt.plot(ypoints, marker = '*')
+plt.plot(ypoints, linestyle = 'dotted')
+plt.plot(ypoints, linestyle = 'dashed')
+plt.plot(ypoints, color = 'r')
+plt.plot(ypoints, c = '#4CAF50')
+plt.plot(ypoints, linewidth = '20.5')
+plt.plot(y1)
+plt.plot(y2)
+plt.plot(x1, y1, x2, y2)
+plt.title("Sports Watch Data", fontdict = font1, loc = 'left')
+plt.xlabel("Average Pulse", fontdict = font2)
+plt.ylabel("Calorie Burnage", fontdict = font2)
+plt.grid(axis = 'x')
+plt.grid(axis = 'y')
+plt.grid(color = 'green', linestyle = '--', linewidth = 0.5)
+plt.subplot(1, 2, 1)
+plt.plot(x,y)
+plt.subplot(1, 2, 2)
+plt.plot(x,y)
+plt.suptitle("MY SHOP")
+plt.scatter(x, y, color = '#88c999')
+plt.scatter(x, y, c=colors)
+plt.scatter(x, y, c=colors, cmap='viridis')
+plt.scatter(x, y, s=sizes)
+plt.scatter(x, y, s=sizes, alpha=0.5)
+plt.scatter(x, y, c=colors, s=sizes, alpha=0.5, cmap='nipy_spectral')
+plt.bar(x,y)
+plt.bar(x, y, color = "red")
+plt.bar(x, y, color = "#4CAF50")
+plt.hist(x)
+plt.pie(y)
+plt.pie(y, lables = mylabels)
+plt.pie(y, lables = mylabels, startangle = 90)
+plt.pie(y, lables = mylabels, explode = myexplode)
+plt.pie(y, lables = mylabels, explode = myexplode, shadow = True)
+plt.pie(y, labels = mylabels, colors = mycolors)
+plt.colorbar()
+plt.legend(title = "Four Fruits:")
+plt.show()
 ```
-```
+
 **Scipy**
+- `Scipy Constants:` As SciPy is more focused on scientific implementations, it provides many built-in scientific constants. 
+```py
+from scipy import constants
+
+print(constants.pi)               #print the constant value of phi
+print(dir(constants))             #a list of all units under the constants module can be seen using the dir() function.
+#Return specified unit in meter 
+print(constants.yotta)            #1e+24
+print(constants.zetta)            #1e+21
+print(constants.exa)              #1e+18
+print(constants.peta)             #1000000000000000.0
+print(constants.tera)             #1000000000000.0
+print(constants.giga)             #1000000000.0
+print(constants.mega)             #1000000.0
+print(constants.kilo)             #1000.0
+print(constants.hecto)            #100.0
+print(constants.deka)             #10.0
+print(constants.deci)             #0.1
+print(constants.centi)            #0.01
+print(constants.milli)            #0.001
+print(constants.micro)            #1e-06
+print(constants.nano)             #1e-09
+print(constants.pico)             #1e-12
+print(constants.femto)            #1e-15
+print(constants.atto)             #1e-18
+print(constants.zepto)            #1e-21
+#return the specified unit in bytes 
+print(constants.kibi)             #1024
+print(constants.mebi)             #1048576
+print(constants.gibi)             #1073741824
+print(constants.tebi)             #1099511627776
+print(constants.pebi)             #1125899906842624
+print(constants.exbi)             #1152921504606846976
+print(constants.zebi)             #1180591620717411303424
+print(constants.yobi)             #1208925819614629174706176
+#return the specified unit in kg
+print(constants.gram)             #0.001
+print(constants.metric_ton)       #1000.0
+print(constants.grain)            #6.479891e-05
+print(constants.lb)               #0.45359236999999997
+print(constants.pound)            #0.45359236999999997
+print(constants.oz)               #0.028349523124999998
+print(constants.ounce)            #0.028349523124999998
+print(constants.stone)            #6.3502931799999995
+print(constants.long_ton)         #1016.0469088
+print(constants.short_ton)        #907.1847399999999
+print(constants.troy_ounce)       #0.031103476799999998
+print(constants.troy_pound)       #0.37324172159999996
+print(constants.carat)            #0.0002
+print(constants.atomic_mass)      #1.66053904e-27
+print(constants.m_u)              #1.66053904e-27
+print(constants.u)                #1.66053904e-27
+#return the specified unit in radians
+print(constants.degree)           #0.017453292519943295
+print(constants.arcmin)           #0.0002908882086657216
+print(constants.arcminute)        #0.0002908882086657216
+print(constants.arcsec)           #4.84813681109536e-06
+print(constants.arcsecond)        #4.84813681109536e-06
+#return the specified unit in seconds
+print(constants.minute)           #60.0
+print(constants.hour)             #3600.0
+print(constants.day)              #86400.0
+print(constants.week)             #604800.0
+print(constants.year)             #31536000.0
+print(constants.Julian_year)      #31557600.0
+#return the specified unit in meters
+print(constants.inch)             #0.0254
+print(constants.foot)             #0.30479999999999996
+print(constants.yard)             #0.9143999999999999
+print(constants.mile)             #1609.3439999999998
+print(constants.mil)              #2.5399999999999997e-05
+print(constants.pt)               #0.00035277777777777776
+print(constants.point)            #0.00035277777777777776
+print(constants.survey_foot)      #0.3048006096012192
+print(constants.survey_mile)      #1609.3472186944373
+print(constants.nautical_mile)    #1852.0
+print(constants.fermi)            #1e-15
+print(constants.angstrom)         #1e-10
+print(constants.micron)           #1e-06
+print(constants.au)               #149597870691.0
+print(constants.astronomical_unit) #149597870691.0
+print(constants.light_year)       #9460730472580800.0
+print(constants.parsec)           #3.0856775813057292e+16
+#return the specified unit in pascale
+print(constants.atm)              #101325.0
+print(constants.atmosphere)       #101325.0
+print(constants.bar)              #100000.0
+print(constants.torr)             #133.32236842105263
+print(constants.mmHg)             #133.32236842105263
+print(constants.psi)              #6894.757293168361
+#return the specified unit in square meters
+print(constants.hectare)          #10000.0
+print(constants.acre)             #4046.8564223999992
+#return the specified unit in cubic meters
+print(constants.liter)            #0.001
+print(constants.litre)            #0.001
+print(constants.gallon)           #0.0037854117839999997
+print(constants.gallon_US)        #0.0037854117839999997
+print(constants.gallon_imp)       #0.00454609
+print(constants.fluid_ounce)      #2.9573529562499998e-05
+print(constants.fluid_ounce_US)   #2.9573529562499998e-05
+print(constants.fluid_ounce_imp)  #2.84130625e-05
+print(constants.barrel)           #0.15898729492799998
+print(constants.bbl)              #0.15898729492799998
+#return the specified unit in meters per second
+print(constants.kmh)              #0.2777777777777778
+print(constants.mph)              #0.44703999999999994
+print(constants.mach)             #340.5
+print(constants.speed_of_sound)   #340.5
+print(constants.knot)             #0.5144444444444445
+#return the specified unit in kelvin
+print(constants.zero_Celsius)     #273.15
+print(constants.degree_Fahrenheit)#0.5555555555555556
+#return the specified function in joules
+print(constants.eV)               #1.6021766208e-19
+print(constants.electron_volt)    #1.6021766208e-19
+print(constants.calorie)          #4.184
+print(constants.calorie_th)       #4.184
+print(constants.calorie_IT)       #4.1868
+print(constants.erg)              #1e-07
+print(constants.Btu)              #1055.05585262
+print(constants.Btu_IT)           #1055.05585262
+print(constants.Btu_th)           #1054.3502644888888
+print(constants.ton_TNT)          #4184000000.0
+#return specified unit in watts
+print(constants.hp)               #745.6998715822701
+print(constants.horsepower)       #745.6998715822701
+#return the specified unit in newton
+print(constants.dyn)              #1e-05
+print(constants.dyne)             #1e-05
+print(constants.lbf)              #4.4482216152605
+print(constants.pound_force)      #4.4482216152605
+print(constants.kgf)              #9.80665
+print(constants.kilogram_force)   #9.80665
 ```
+- `SciPy Optimizers:` are a set of procedures defined in SciPy that either find the minimum value of a function, or the root of an equation. 
+```py
+from scipy.optimize import root, minmize
+from math import cos
+#find the root of the equation x + cos(x)
+def eqn(x): return x + cos(x)       
+myroot = root(eqn,0)            
+print(myroot.x)
+print(myroot)
+#minimize the function x^2 + x + 2 with BFGS
+def eqn(x): return x**2 + x + 2
+mymin = minimize(eqn, 0, method='BFGS')
+print(mymin)
+```
+- `SciPy Sparse Data`: is data that has mostly unused elements (elements that don't carry any information). *Sparse Data* is a data set where most of the item values are zero. *Dense Array* is the opposite of sparse array, which most of the values are not zero.
+```py
+from scipy.optimize import csr_matrix
+#create a CSR (compressed sparse row) or CSC (compressed sparse column) matrix from an array 
+arr = np.array([[0, 0, 0], [0, 0, 1], [1, 0, 2]])
+print(csr_matrix(arr))
+print(csr_matrix(arr).data)
+print(csr_matrix(arr).count_nonzero())
+print(csr_matrix(arr).eliminate_zeros())
+print(csr_matrix(arr).sum_duplicates())
+print(csr_matrix(arr).tocsc())
+```
+- `SciPy Graphs`: graphs are an essential data structure. *Adjececy Matrix* is a **nxn** matrix where **n** is the number of elements in a graph. 
+```py
+import numpy as np
+from scipy.sparse.csgraph import connected_components
+from scipy.sparse import csr_matrix
+
+#find all of the connected components with the connected_components() method
+arr = np.array([[0, 1, 2], [1, 0, 0], [2, 0, 0]])
+print(connected_components(csr_matrix(arr)))
+#use the dijkstra method to find the shortest path in a graph from one element to other
+print(dijkstra(csr_matrix(arr), return_predecessors=True, indices=0))
+#use the floyd_warshall() method to find shortest path between all pairs of elements.
+print(floyd_warshall(csr_matrix(arr), return_predecessors=True))
+#use bellman_ford() method can also find the shortest path between all pairs of elements, but this method can handle negative weights as well.
+print(bellman_ford(csr_matrix(arr), return_predecessors=True, indices=0))
+#the depth_first_order() method returns a depth first traversal from a node
+print(depth_first_order(csr_matrix(arr), 1))
+#The breadth_first_order() method returns a breadth first traversal from a node.
+print(breadth_first_order(csr_matrix(arr), 1))
+```
+- `SciPy Spatial Data`: spatial data refers to data that is represented in a geomatric space.
+```py
+import numpy as np
+from scipy.spatial import Delaunay, ConvexHull, KDTree
+from scipy.spatial.distance import euclidean, cityblock, cosine, hamming
+import matplotlib.pyplot as plt
+
+#Spatial Data refers to data that is represented in a geomatric space.
+points1 = np.array([[2, 4], [3, 4], [3, 0], [2, 2], [4, 1]])
+points2 = np.array([[2, 4], [3, 4], [3, 0], [2, 2], [4, 1], [1, 2], [5, 0], [3, 1], [1, 2], [0, 2]])
+points3 = [(1, -1), (2, 3), (-2, 3), (2, -3)]
+#create a triangulation of a polygon is to divide the polygon into multiple triangles with which we can compute an area of the polygon
+simplices = Delaunay(points1).simplices
+plt.triplot(points[:, 0], points[:, 1], simplices)
+plt.scatter(points[:, 0], points[:, 1], color='r')
+plt.show()
+#a convex hull is the smallest polygon that covers all of the given points.
+hull_points = ConvexHull(points2).simplices
+plt.scatter(points[:,0], points[:,1])
+for simplex in hull_points: plt.plot(points[simplex,0], points[simplex,1], 'k-')
+plt.show()
+#KDTrees are a datastructure optimized for nearest neighbor queries
+print(KDTree(points).query((1, 1)))
+
+#DISTANCE MATRIX: find various types of distances between two points in data science, euclidean distance, cosine distances etc.
+p1 = (1, 0)
+p2 = (10, 2)
+#find the euclidean distance between given points.
+print(euclidean(p1, p2))
+#cityblock distance is the distance computed using 4 degress of movemnent.
+print(cityblock(p1, p2))
+#cosine distance is the value of cosine angle between the two points A and B
+print(cosine(p1, p2))
+#hamming distance is the proportion of bits where two bits are difference
+print(hamming(p1,p2))
+```
+- `SciPy Interpolation`: is a method for generating points between given points
+```py
+from scipy.iterpolate import interp1d
+import numpy as np
+
+#interp1d() is used to interpolate a distribution with 1 variable. It takes x and y points and returns a callable function that can be called with x and returns corresponding y.
+xs = np.arange(10)
+ys = 2*xs + 1
+interp_func = interp1d(xs, ys)
+print(interp_func(np.arange(2.1, 3, 0.1)))
+#Output: [5.2  5.4  5.6  5.8  6.   6.2  6.4  6.6  6.8]
+#UnivariateSpline() function takes xs and ys and produce a callable function that can be called with new xs
+xs = np.arange(10)
+ys = xs**2 + np.sin(xs) + 1
+interp_func = UnivariateSpline(xs, ys)
+print(interp_func(np.arange(2.1, 3, 0.1)))
+#Output: [5.62826474 6.03987348 6.47131994 6.92265019 7.3939103  7.88514634 8.39640439 8.92773053 9.47917082]
+#Radial Basis Function Rbf() function also takes xs and ys as arguments and produces a callable function that can be called with new xs.
+xs = np.arange(10)
+ys = xs**2 + np.sin(xs) + 1
+interp_func = Rbf(xs, ys)
+print(interp_func(np.arange(2.1, 3, 0.1)))
+#Output: [6.25748981  6.62190817  7.00310702  7.40121814  7.8161443   8.24773402  8.69590519  9.16070828  9.64233874]
 ```
 **Machine Learning**
 ```
