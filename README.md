@@ -999,7 +999,38 @@ interp_func = Rbf(xs, ys)
 print(interp_func(np.arange(2.1, 3, 0.1)))
 #Output: [6.25748981  6.62190817  7.00310702  7.40121814  7.8161443   8.24773402  8.69590519  9.16070828  9.64233874]
 ```
+- `SciPy Stastical Significance Tests` means that the result that was produced has a reason behind it, it was not produced randomly, or by chance.
+```py
+import numpy as np
+from scipy.stats import ttest_ind, kstest, describe, skew, kurtosis, normaltest
+
+v1 = np.random.normal(size=100)
+v2 = np.random.normal(size=100)
+
+#T-test are used to determine if there is significant difference between means of two variables. The function ttest_ind() takes two samples of same size and produces a tuple of t-statistic and p-value
+print(ttest_ind(v1, v2))
+print(ttest_ind(v1, v2).pvalue)
+#KS-test is used to check if given values follow a distribution. The function takes the value to be tested, and the CDF as two parameters.
+print(kstest(v1, 'norm'))
+#In order to see a summary of values in an array, we can use the describe() function.
+print(describe(v1))
+#Normality tests are based on the skewness and kurtosis. The normaltest() function returns p value ior the null hypothesis
+print(skew(v1))
+print(kurtosis(v1))
+print(normaltest(v1))
+```
 **Machine Learning**
+- `Mean`, `Median`, `Mode`
+- `Standard Deviation`
+- `Percentile`
+- `Data Distribution`
+- `Normal Data Distribution`
+- `Linear Regression` 
+- `Polynomial Regression`
+- `Multiple Regression`
+- `Scale`
+- `Train/Test`
+- `Decision Tree`
 ```
 ```
 -----
