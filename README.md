@@ -12,6 +12,65 @@ print("A") if a > b else print("=") if a == b else print("B")
 def my_function(**kid): print("His last name is " + kid["lname"])
 my_function(fname = "Tobias", lname = "Refsnes")
 ```
+**String**
+- String Basic Operation:
+```py
+a = "Hello, World!"
+a.upper()                 #The upper() method returns the string in upper case
+a.lower()                 #The lower()  method returns the string in lower case
+a.strip()                 #The strip()  method removes any whitespace from the beginning or the end
+a.replace("H","J")        #The replace()  method replace a string with another string
+a.split(",")              #The split() method splits the string into substrings if it finds instances of the separator
+a + b                     #Merge variable a with variable b into variable c
+a.format()                #Use the format() method to insert numbers into strings
+```
+- String Methods:
+```
+capitalize()              #Converts the first character to upper case
+casefold()                #Converts string into lower case
+center()                  #returns a centered string 
+count()                   #returns the number of times a specified value occurs in a string
+encode()                  #returns an encoded version of the string 
+endwith()                 #returns true if the string ends with the specified value
+expandtabs()              #sets the tab size of the string 
+find()                    #searchs the string for a specified value and returns the positions of where it was found
+format()                  #formats specified values in a string 
+format_map()              #format specified values in a string 
+index()                   #searches the string for a specified value and returns the position of where it was found
+isalnum()                 #returns True if all characters in the string are alphaneumeric
+isalpha()                 #returns True if all characters in the string are alphaneumeric
+isdecimal()               #returns True if all characters in the string are decimals
+isdigit()                 #returns True if all characters in the string are digits
+isdentifier()             #returns True if the string is an identifier
+islower()                 #returns True if all characters in the string are lower case
+isnumeric()               #returns True if all characters in the string are numeric
+isprintable()             #returns True if all characters in the string are printable
+isspace()                 #returns True if all characters in the string are whitespaces
+istitle()                 #returns True if the string follows the rules of a title
+isupper()                 #returns True if all characters in the string are upper case
+join()                    #joins the elements of an iterable to the end of the string
+ljust()                   #returns a left justified version of the string
+lower()                   #converts a string into lower case
+lstrip()                  #returns a left trim version of the string
+maketrans()               #returns a translation table to be used in translations
+partition()               #returns a tuple where the string is parted into three parts
+replace()                 #returns a string where a specified value is replaced with a specified value
+rfind()                   #searches the string where a specified value is replaced with a specified value
+rindex()                  #searches the string for a specified value and returns the last position of where it was found
+rjust()                   #returns a right justified version of the string
+rpartition()              #returns a tuple where the string is parted into three parts
+rsplit()                  #split the string at the specified separator, and returns a list
+rstrip()                  #returns a right trim version of the string
+split()                   #splits the string at the specified separator, and returns a list
+splitlines()              #splits the string at line breaks and returns a list
+startswith()              #returns true if the string starts with the specified value
+strip()                   #returns a trimmed version of the string
+swapcase()                #swaps cases, lower case becomes upper case and vice versa
+title()                   #converts the first character of each word to upper case
+translate()               #returns a translated string
+upper()                   #converts a string into upper case
+zfill()                   #fills the string with a specified number of 0 values at the begining 
+```
 **List**
 - List Basic Operation: 
 ```
@@ -28,7 +87,7 @@ l.reverse()         #reverse the order of items in the list
 l.sort()            #returns a copy of the list
 ```
 - List Basic Function:
-```
+```py
 reduce(list)        #apply a particular function passed in its argument to all of the list elements stores the intermediate result and only returns the final summation value
 sum(list)           #sum up the numbers in the list
 ord(string)         #returns an integer representing the unicode code point of the given unicode character (only 1 char)
@@ -86,7 +145,7 @@ print(list(map(lambda x, y: x + y, numbers1, numbers2)))
 m.copy()            #returns a shallow copy of the dictionary
 m.clear()           #removes all the key-value pairs from m
 m.pop()             #removes and returns an element from a dictionary having the given key
-m.popitem()           #removes the arbitrary key-value pair from the dictionary and returns it as tuple (hapus key-value sewenang-wenang)
+m.popitem()         #removes the arbitrary key-value pair from the dictionary and returns it as tuple (hapus key-value sewenang-wenang)
 m.get(k)            #returns the value associated with key k in map m
 m.str()             #produces a printable string representation of a dictionary
 m1.update(m2)       #adds dictionary dict2's key-values pairs to dict
@@ -157,7 +216,7 @@ myfamily = {
 
 **Tupple**
 - Tupple Basic Operation:
-```
+```py
 t.count(arg)        # returns the number of times a specified value occurs in a tuple       
 t.index(arg)        # searches the tuple for a specified value and returns the position of where it was found
 ```
@@ -178,22 +237,22 @@ print(("apple", "banana", "cherry") * 2)
 **Sets**
 - Sets Basic Operations:
 ```
-s.add(e)            #add element e to the set s
-s.update(e)         #add items from another set into the current set
-s.remove(e)         #remove element e from the set s
-s.discard(e)        #remove element e from the set s
-s.pop()             #remove the last element from the set s
-s.clear()           #remove all elements in set s
-s.contains(e)       #returns whether e is a member of s
-s.size()            #returns the number of elements in s
-s.isEmpty()         #returns whether there are no elements in s
-s.addAll(t)         #add all the elements of set t to set s
-s.retainAll(t)      #removes all the elements from s that are not in t
-s.union(t)          #returns a new set which contains all the elements of set s and all the elements of set t, and no others
-s.intersect(t)      #return a new set which contains all and only those elements in both s and t
-s.intersection_update(t)#keep the items that exist in bot set s and set t
-s.minus(t)          #returns a new set which contains all and only those elements in s but not in t
-s.symmetricMinus(t) #returns a new set which contains all and only those elements in either set s or set t but not both
+s.add(e)                  #add element e to the set s
+s.update(e)               #add items from another set into the current set
+s.remove(e)               #remove element e from the set s
+s.discard(e)              #remove element e from the set s
+s.pop()                   #remove the last element from the set s
+s.clear()                 #remove all elements in set s
+s.contains(e)             #returns whether e is a member of s
+s.size()                  #returns the number of elements in s
+s.isEmpty()               #returns whether there are no elements in s
+s.addAll(t)               #add all the elements of set t to set s
+s.retainAll(t)            #removes all the elements from s that are not in t
+s.union(t)                #returns a new set which contains all the elements of set s and all the elements of set t, and no others
+s.intersect(t)            #return a new set which contains all and only those elements in both s and t
+s.intersection_update(t)  #keep the items that exist in bot set s and set t
+s.minus(t)                #returns a new set which contains all and only those elements in s but not in t
+s.symmetricMinus(t)       #returns a new set which contains all and only those elements in either set s or set t but not both
 ```
 - How to use `union`, `intersection`, `difference`, `symmetricminus`
 ```py
