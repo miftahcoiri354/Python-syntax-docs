@@ -1264,6 +1264,68 @@ myresult = mycursor.fetchall()      #Only used if you going to fetch or show all
 for x in myresult: print(x)
 mydb.commit()                       #Commit if you make a changes on the database
 ```
+**Python MongoDB**
+- `pymongo`: Create Database, Create Collection, Insert, Find, Query, Sort, Delete, Drop Collection, Update, Limit
+```py
+import pymongo
+
+#connect to mongodb
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+#CREATE DATABASE: the new database as "mydatabase"
+mydb = myclient["mydatabase"]
+#return a list of your system's databases
+dblist = myclient.list_database_names()
+print(dblist)
+#check specific database by name
+if "mydatabase" in dblist: print("The database exists.")
+#CREATE COLLECTION: a collection called "customers"
+mycol = mydb["customers"]
+#return a list of all collections in your database
+collist = mydb.list_collection_names()
+print(collist)
+#check if the 'customers' collection axist
+if "customers" in collist: print("The collection exists.")
+
+#INSERT: a record, or document as it is called in MongoDB, into a collection, we use the insert_one() method and return the value of the _id field
+mylist = [{ "name": "Amy", "address": "Apple st 652"}, { "name": "Hannah", "address": "Mountain 21"}, { "name": "Michael", "address": "Valley 345"}, { "name": "Sandy", "address": "Ocean blvd 2"}]
+x = mycol.insert_many(mylist)     #you can use insert many if the data is many dict
+x = mycol.insert_one(mydict)      #you can use insert one if the data is only one dict
+print(x.inserted_id)
+#FIND: to select data from a collection in MongoDB, we can use the find_one() method, or you can use find()
+x = mycol.find_one()
+print(x)
+for x in mycol.find(): print(x)
+for x in mycol.find({},{"_id":0, "name":1, "address":1}): print(x) #only print the name and address exclude the _id
+for x in mycol.find({},{"address":0}): print(x)       #only print the name and the id exclude the address
+#QUERY: when finding documents in a collection, you can filter the result by using a query object. and to make advaced queries you can use modifiers as values in the query object. you can also use regular expression as a modifier
+myquery = { "address": "Park Lane 38" }
+myquery = { "address": { "$gt": "S" } }
+myquery = { "address": { "$regex": "^S" } }
+mydoc = mycol.find(myquery)
+for x in mydoc: print(x)
+#SORT: use the sort() method to sort the result in ascending or descending order.
+mydoc = mycol.find().sort("name")
+mydoc = mycol.find().sort("name", -1)     #sort the result reverse alphabetically by name
+for x in mydoc: print(x)
+#DELETE: to delete one document, we use the delete_one() method.
+myquery = { "address": "Mountain 21" }
+myquery1 = { "address": {"$regex": "^S"} }
+mycol.delete_one(myquery)
+mycol.delete_many(myquery1)
+mycol.delete_many({})           #delete all documents in the "customers" collection
+#DROP COLLECTION: you can delete a table or collection as it is called in MongoDB, by using the drop() method
+mycol.drop()
+#UPDATE COLLECTION: you can update a record, or document as it is called in MongoDB, by using the update_one() method.
+myquery = { "address": "Valley 345" }
+newvalues = { "$set": { "address": "Canyon 123" } }
+myquery = { "address": { "$regex": "^S" } }
+newvalues = { "$set": { "name": "Minnie" } }
+mycol.update_one(myquery, newvalues)
+for x in mycol.find(): print(x)
+#LIMIT: to limit the result in MongoDB, we use the limit() method.
+myresult = mycol.find().limit(5)
+for x in myresult: print(x)
+```
 -----
 # **HACKERRANK PRACTICE**
 ## **1. Basic Data Types**
