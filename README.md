@@ -1020,18 +1020,249 @@ print(kurtosis(v1))
 print(normaltest(v1))
 ```
 **Machine Learning**
-- `Mean`, `Median`, `Mode`
-- `Standard Deviation`
-- `Percentile`
-- `Data Distribution`
-- `Normal Data Distribution`
-- `Linear Regression` 
-- `Polynomial Regression`
-- `Multiple Regression`
-- `Scale`
-- `Train/Test`
-- `Decision Tree`
+- `Mean`, `Median`, `Mode`, `Standard Deviation`, `Percentile`
+```py
+import numpy as np
+from scipy import stats
+
+speed = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+
+#the mean value is the average value
+print(np.mean(speed))
+#the median value is the value in the middle, after you have sorted all the values
+print(np.median(speed))
+#the mode value is the value that appears the most number of times
+print(stats.mode(speed))
+#standard deviation is a number that describes how spread out the values are.
+print(np.std(speed))
+#variance is another number that indicates how spread out the values are.
+print(np.var(speed))
+#the formula to find the standard deviation is the square root of the variance.
+print(np.std(speed))
+#percentiles are used in statistics to give you a number that describes the value that a given percent of the values are lower than.
+print(np.percentile(speed, 75))   #75%
 ```
+- `Data Distribution`, `Normal Data Distribution`
+```py
+import numpy as np
+import matplotlib.pyplot as plt
+
+#to visualize the data set we can draw a histogram with the data we collected
+x = np.random.uniform(0.0, 5.0, 250)
+plt.hist(x, 5)
+plt.show()
+#an array containing 250 values is not considered very big, but now you know how to create a random set of values, and by changing the parameters, you can create the data set as big as you want.
+x = numpy.random.normal(5.0, 1.0, 100000)
+plt.hist(x, 100)
+plt.show()
+```
+- `Linear Regression`: uses the relationship between the data-points to draw a straight line through all them. 
+```py
+import matplotlib.pyplot as plt
+from scipy import stats
+
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
+y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+
+slope, intercept, r, p, std_err = stats.linregress(x, y)
+def myfunc(x): return slope * x + intercept
+mymodel = list(map(myfunc, x))
+plt.scatter(x,y)
+plt.plot(x, mymodel)
+plt.show()
+```
+- `Polynomial Regression` : like linear regression, uses the relationship between the variables x and y to find the best way to draw a line through the data points.
+```py
+import numpy as np
+import matplotlib.pyplot as plt
+import sklearn.metrics import r2_score
+
+x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
+y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
+
+mymodel = np.poly1d(np.polyfit(x, y, 3))
+
+#draw the line of polynomial regression
+myline = np.linspace(1, 22, 100)
+plt.scatter(x,y)
+plt.plot(myline, mymodel(myline))
+plt.show()
+#how well does my data fit in a polymonial regression?
+print(r2_score(y, mymodel(x)))
+#predict the speed of a car passing at 17 P.M
+print(mymodel(17))
+#these values for the x- and y-axis should result in a very bad fit for polynomial regression
+myline = np.linspace(2, 95, 100)
+plt.scatter(x, y)
+plt.plot(myline, mymodel(myline))
+plt.show()
+#you should get a very low r-squared value
+print(r2_score(y, mymodel(x)))
+```
+- `Multiple Regression`: is like linear regression, but with more than one independent value, meaning that we try to predict a value based on two or more variables.
+```py
+import pandas as pd
+from sklearn import linear_model
+
+df = pd.read_('cars.csv')
+x = df[['Weight', 'Volume']]
+y = df['CO2']
+
+regr = linear_model.LinearRegression()
+regr.fit(x,y)
+
+#predict the CO2 emission of a car where the weight is 2300kg, and the volume is 1300cm3:
+print(regr.predict([[2300, 1300]]))
+#print the coefficient values of the regression object
+print(regr.coef_)
+#copy the example from before, but change the weight from 2300 to 3300
+print(regr.predict([[3300, 1300]]))
+```
+- `Scale`: when your data has different values, and even different measurement units, it can be difficult to compare them. In here we need to scale data into new values that are easier to compare.
+```py
+import pandas
+from sklearn import linear_model
+from sklearn.preprocessing import StandardScaler
+scale = StandardScaler()
+
+df = pandas.read_csv("cars2.csv")
+X = df[['Weight', 'Volume']]
+y = df['CO2']
+#scale all values in the weight and volume columns
+scaledX = scale.fit_transform(X)
+print(scaledX)
+#predict the CO2 emision from a 1.3 liter car that weight 2300 kilograms
+regr = linear_model.LinearRegression()
+regr.fit(scaledX, y)
+scaled = scale.transform([[2300, 1.3]])
+predictedCO2 = regr.predict([scaled[0]])
+print(predictedCO2)
+```
+- `Train/Test`: is a method to measure the accuracy of your model
+```py
+import numpy as np
+import matplotlib.pyplot as plt
+np.random.seed(2)
+
+x = np.random.normal(3, 1, 100)
+y = np.random.normal(150, 40, 100)/x
+
+train_x = x[:80]
+train_y = y[:80]
+test_x = x[80:]
+test_y = y[80:]
+#predict the data using polynom regression
+mymodel = np.poly1d(np.polyfit(train_x, train_y, 4))
+myline = np.linspace(0, 6, 100)
+#show the input and output data using matplotlib plot
+plt.scatter(train_x, train_y)
+plt.plot(myline, mymodel(myline))
+plt.show()
+#R2 measures the relationship between the x axis and the y axis, and the value ranges from 0 to 1, where 0 means no relationship, and 1 means totally related.
+print(r2_score(train_y, mymodel(train_x)))
+print(r2_score(test_y, mymodel(test_x)))
+```
+- `Decision Tree`: is a flow chart, and can help you make decisions based on previous experience.
+```py
+import pandas as pd
+import pydotplus
+import matplotlib.pyplot as plt
+import matplotlib.image as pltimg
+from sklearn import tree
+from sklearn.tree import DecisionTreeClassifier
+#first, import the modules you need, and read the dataset with pandas
+df = pandas.read_csv("shows.csv")
+#to make decision tree, all data has to be numerical. pandas has a map() method that takes a dictionary with information on how to convert the values.
+d = {'UK': 0, 'USA': 1, 'N': 2}
+df['Nationality'] = df['Nationality'].map(d)
+d = {'YES': 1, 'NO': 0}
+df['Go'] = df['Go'].map(d)
+#then we have to seperate the feature columns from the target column. The feature columns are the columns that we try to predict from, and the target column is the column with the values we try to predict.
+features = ['Age', 'Experience', 'Rank', 'Nationality']
+X = df[features]
+y = df['Go']
+#predict values using DecisionTreeClassifier() from sklearn
+dtree = DecisionTreeClassifier()
+dtree = dtree.fit(X, y)
+print(dtree.predict([[40, 10, 7, 1]]))
+# save the decision tree as an image and show the image
+data = tree.export_graphviz(dtree, out_file=None, feature_names=features)
+graph = pydotplus.graph_from_dot_data(data)
+graph.write_png('mydecisiontree.png')
+img=pltimg.imread('mydecisiontree.png')
+imgplot = plt.imshow(img)
+plt.show()
+```
+**Python MySQL**
+- `MySQL Connector`: create database, create table, insert, select, where, order by, delete, drop table, update, limit, join
+```py
+import mysql.connector
+
+#start creating a connection to the databse using the username and password from your MySQL database
+mydb = mysql.connector.connect(
+  host = 'localhost',
+  user = 'yourusername',
+  password = 'yourpassword'
+  #database = "mydatabase"      #You can use this if you already have database "mydatabase" in MySQL Database
+  )
+#CREATE DATABASE
+#create a database named "mydatabase"
+mycursor = mydb.cursor()
+mycursor.execute("CREATE DATABASE mydatabase")
+#return a list of your system's database
+mycursor.execute("SHOW DATABASES")
+for x in mycursor: print(x)
+#CREATE TABLE
+#create a table named "customer" after you already connected to the "mydatabase" 
+mycursor.execute("CREATE TABLE customers (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(225), address VARCHAR(225))")
+#you can create primary key on an existing table
+mycursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
+#return a list  of your system's database
+mycursor.execute("SHOW TABLES")
+for x in mycursor: print(x)
+#INSERT 
+#insert a record in the "customers" table
+sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
+val = [('Amy', 'Apple st 652'), ('Hannah', 'Mountain 21'), ('Michael', 'Valley 345'),]
+mycursor.execute(sql, val)
+mydb.commit()
+#print the result and look the ID
+print(mycursor.rowcount, "was inserted.")
+print("1 record inserted, ID:", mycursor.lastrowid)
+#SELECT, WHERE, ORDER BY, DELETE
+#to select from a table in MySQL, use the "SELECT" 
+#you can filter the selection by using the "WHERE" statement
+#use the ORDER BY statement to sort the result in ascending or descending order.
+#you can delete records from existing table by using "DELETE FROM" statement
+#you can delete an existing table by using the "DROP TABLE" statement
+#you can update existing records in a table by using the "UPDATE" statement
+#you can limit the number of records returned from the query, by using the "LIMIT" statement
+#you can combine rows from two or more tables, based on a related column between them, by using a JOIN statement
+mycursor.execute("SELECT name, address FROM customers")
+sql = "SELECT * FROM customers WHERE address == 'Park Lane 38'"
+sql = "SELECT * FROM customers WHERE address LIKE '%way%'"
+sql = "SELECT * FROM customers WHERE address = %s"
+adr = ("Yellow Garden 2")
+sql = "SELECT * FROM customers ORDER BY name"
+sql = "SELECT * FROM customers ORDER BY name DESC"
+sql = "DELETE FROM customers WHERE address = 'Mountain 21'"
+sql = "DELETE FROM customers WHERE address = %s"
+adr = ("Yellow Garden 2")
+sql = "DROP TABLE customers"
+sql = "DROP TABLE IF EXISTS customers"  
+sql = "UPDATE customers SET address = 'Canyon 123' WHERE address = 'Valley 345'"
+sql = "UPDATE customers SET address = %s WHERE address = %s"
+val = ("Valley 345", "Canyon 123")
+sql = "SELECT * FROM customers LIMIT 5"
+sql = "SELECT users.name AS user, products.name AS favorite FROM users INNER JOIN products ON users.fav = products.id"
+sql = "SELECT users.name AS user, products.name AS favorite FROM users LEFT JOIN products ON users.fav = products.id"
+sql = "SELECT users.name AS user, products.name AS favorite FROM users RIGHT JOIN products ON users.fav = products.id"
+
+mycursor.execute(sql)
+mycursor.execute(sql, adr)          #Execute sql query
+myresult = mycursor.fetchall()      #Only used if you going to fetch or show all the query data
+for x in myresult: print(x)
+mydb.commit()                       #Commit if you make a changes on the database
 ```
 -----
 # **HACKERRANK PRACTICE**
