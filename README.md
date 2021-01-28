@@ -1,4 +1,7 @@
 # **PYTHON DOCUMENTATION**
+**Table of Contents:**
+- [**Basic Syntax**](#basic-syntax)
+- []()
 ----
 ## **Basic Syntax**
 **If Else**
