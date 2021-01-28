@@ -1,26 +1,52 @@
 **Table of Contents:**
 - [**PYTHON DOCUMENTATION**](#python-documentation)
   - [**Basic Syntax**](#basic-syntax)
+      - [**If Else**](#if-else)
+      - [**Function**](#function)
+      - [**String**](#string)
+      - [**List**](#list)
+      - [**Dictionary**](#dictionary)
+      - [**Sets**](#sets)
+      - [**Classes/Objects**](#classesobjects)
+      - [**Iterators**](#iterators)
+      - [**Try Except**](#try-except)
   - [**Basic Dependencies**](#basic-dependencies)
+      - [**Datetime**](#datetime)
+      - [**Math**](#math)
+      - [**JSON**](#json)
+      - [**RegEx**](#regex)
+      - [**OS**](#os)
   - [**Built-in Dependencies**](#built-in-dependencies)
+      - [**NumPy**](#numpy)
+      - [**Pandas**](#pandas)
+      - [**Matplotlib**](#matplotlib)
+      - [**Scipy**](#scipy)
+      - [**Machine Learning**](#machine-learning)
   - [**Python Databases**](#python-databases)
+      - [**Python MySQL**](#python-mysql)
+      - [**Python MongoDB**](#python-mongodb)
 - [**HACKERRANK PRACTICE**](#hackerrank-practice)
   - [**1. Basic Data Types**](#1-basic-data-types)
+      - [**Input Data**](#input-data)
+      - [**Basic Calculation**](#basic-calculation)
+      - [**List Comprehensions**](#list-comprehensions)
+      - [**Nested List**](#nested-list)
+      - [**list dictionary**](#list-dictionary)
 ----
 # **PYTHON DOCUMENTATION**
 ## **Basic Syntax**
-**If Else**
+#### **If Else**
 ```py
 if a > b: print("a is greater than b")
 print("A") if a > b else print("B")
 print("A") if a > b else print("=") if a == b else print("B")
 ```
-**Function**
+#### **Function**
 ```py
 def my_function(**kid): print("His last name is " + kid["lname"])
 my_function(fname = "Tobias", lname = "Refsnes")
 ```
-**String**
+#### **String**
 - String Basic Operation:
 ```py
 a = "Hello, World!"
@@ -79,7 +105,7 @@ translate()               #returns a translated string
 upper()                   #converts a string into upper case
 zfill()                   #fills the string with a specified number of 0 values at the begining 
 ```
-**List**
+#### **List**
 - List Basic Operation: 
 ```
 l.append(arg)       #add an element to the end of the list
@@ -147,7 +173,7 @@ print(list(map(lambda x, y: x + y, numbers1, numbers2)))
 ```
 - Link References: [geeksforgeeks.org](https://www.geeksforgeeks.org/python-list/)
 
-**Dictionary**
+#### **Dictionary**
 - Dictionary Basic Operations:
 ```
 m.copy()            #returns a shallow copy of the dictionary
@@ -242,7 +268,7 @@ print(("apple", "banana", "cherry") * 2)
 # Output: ('apple', 'banana', 'cherry', 'apple', 'banana', 'cherry')
 ```
 
-**Sets**
+#### **Sets**
 - Sets Basic Operations:
 ```
 s.add(e)                  #add element e to the set s
@@ -272,7 +298,7 @@ print("Intersection :", A & B)
 print("Difference :", A - B) 
 print("Symmetric difference :", A ^ B) 
 ```
-**Classes/Objects**
+#### **Classes/Objects**
 - How to create `parent class` == `Person`
 ```py
 class MyClass: x = 5
@@ -323,7 +349,7 @@ print(x.graduationyear)
 x.welcome()
 #Output: Welcome Mike Olsen to the class of 2019
 ```
-**Iterators**
+#### **Iterators**
 ```py
 mytuple = iter("apple", "banana", "cherry")
 print(next(mytuple), next(mytuple), next(mytuple))
@@ -345,7 +371,7 @@ myiter = iter(MyNumbers())
 print(next(myiter), next(myiter), next(myiter), next(myiter), next(myiter))
 # Output: 1 2 3 4 5
 ```
-**Try Except**
+#### **Try Except**
 ```py
 try: print(x)
 except NameError: print("Variable x is not defined")
@@ -361,7 +387,7 @@ if not type("hello") is int: raise TypeError("Only integers are allowed")
 #output: Only integers are allowed
 ```
 ## **Basic Dependencies**
-**Datetime**
+#### **Datetime**
 ```py
 import datetime
 
@@ -402,7 +428,7 @@ DIRECTIVE   EXAMPLE         DESCRIPTION
 %u          1               ISO 8601 weekday (1-7)
 %V          01              ISO 8601 weeknumber (01-53)   
 ```
-**Math**
+#### **Math**
 
 ```py
 import math 
@@ -416,7 +442,7 @@ math.floor(1.4)             #method rounds a number downwards to its nearest int
 math.sqrt(64)              #returns the square root of a number
 math.pi                     #return the value of phi(3.14...)
 ```
-**JSON**
+#### **JSON**
 ```py
 import json
 #Convert from JSON to Python
@@ -447,7 +473,7 @@ print(json.dumps(x, indent=4, separators=(". ", " = ")))
 # sort the result alphabetically by keys:
 print(json.dumps(x, indent=4, sort_keys=True))
 ```
-**RegEx**
+#### **RegEx**
 ```py
 import re
 
@@ -468,7 +494,7 @@ print(re.search(r"\bS\w+", txt).span())
 print(re.search(r"\bS\w+", txt).group())
 #Output: Spain
 ```
-**os**
+#### **OS**
 - how to `delete` file
 ```py
 import os
@@ -480,7 +506,7 @@ os.remove("demofile.txt") if os.path.exists("demofile.txt") else print("The file
 os.rmdir("myfolder")
 ```
 ## **Built-in Dependencies**
-**NumPy**
+#### **NumPy**
 - How to create `array`?
 ```py
 import numpy as np
@@ -734,7 +760,7 @@ z = np.intersect1d(x,y,assume_unique=True)  #find intersection of two arrays
 z = np.setdiff1d(x,y,assume_unique=True)    #find the difference of the set x and set y
 z = np.setxor1d(x,y,assume_unique=True)     #find the symmetric difference of the set x and set y
 ```
-**Pandas**
+#### **Pandas**
 ```py
 import pandas as pd
 
@@ -758,7 +784,7 @@ df = df.drop_duplicates(inplace = True)
 for x in df.index: df.loc[x, "Duration"] = 120 if df.loc[x, "Duration"] > 120
 for x in df.index: df.drop(x, inplace = True) if df.loc[x, "Duration"] > 120
 ```
-**Matplotlib**
+#### **Matplotlib**
 ```py
 import numpy as np
 import pandas as pd
@@ -824,7 +850,7 @@ plt.legend(title = "Four Fruits:")
 plt.show()
 ```
 
-**Scipy**
+#### **Scipy**
 - `Scipy Constants:` As SciPy is more focused on scientific implementations, it provides many built-in scientific constants. 
 ```py
 from scipy import constants
@@ -1086,7 +1112,7 @@ print(skew(v1))
 print(kurtosis(v1))
 print(normaltest(v1))
 ```
-**Machine Learning**
+#### **Machine Learning**
 - `Mean`, `Median`, `Mode`, `Standard Deviation`, `Percentile`
 ```py
 import numpy as np
@@ -1261,7 +1287,7 @@ imgplot = plt.imshow(img)
 plt.show()
 ```
 ## **Python Databases**
-**Python MySQL**
+#### **Python MySQL**
 - `MySQL Connector`: create database, create table, insert, select, where, order by, delete, drop table, update, limit, join
 ```py
 import mysql.connector
@@ -1332,7 +1358,7 @@ myresult = mycursor.fetchall()      #Only used if you going to fetch or show all
 for x in myresult: print(x)
 mydb.commit()                       #Commit if you make a changes on the database
 ```
-**Python MongoDB**
+#### **Python MongoDB**
 - `pymongo`: Create Database, Create Collection, Insert, Find, Query, Sort, Delete, Drop Collection, Update, Limit
 ```py
 import pymongo
@@ -1397,7 +1423,7 @@ for x in myresult: print(x)
 -----
 # **HACKERRANK PRACTICE**
 ## **1. Basic Data Types**
-**Input Data**
+#### **Input Data**
 ```python
 a = input()
 a = int(input())
@@ -1405,21 +1431,21 @@ a = int(raw_input())
 a = int(raw_input("input any integer:"))
 ```
 
-**Basic Calculation**
+#### **Basic Calculation**
 ```python
 pembagian = a/b
 pembulatan = a//b
 habis_dibagi = a%b
 ```
 
-**List Comprehensions**
+#### **List Comprehensions**
 ```python
 x, y, z, n = [int(raw_input()) for _ in range(4)]
 array_list = [[xx,yy,zz] for xx in range(x+1) for yy in range(y+1) for zz in range(z+1)]
 array_list_final = [array for array in array_list if array[0]+array[1]+array[2] != n]  
 ```
 
-**Nested List**
+#### **Nested List**
 ```python
 student_list = [[input(), float(input())] for _ in range(int(input()))]
 unique_score = [score for score in set([list[1] for list in student_list])]
@@ -1432,7 +1458,7 @@ for x in group_list:
     print(x)
 ```
 
-**list dictionary**
+#### **list dictionary**
 ```python
 students_data = [raw_input().split() for _ in range(int(raw_input()))]
 name_list, scores_list = [line[0], line[1:] for line in students_data]
