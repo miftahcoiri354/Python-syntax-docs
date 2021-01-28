@@ -1,8 +1,13 @@
-# **PYTHON DOCUMENTATION**
 **Table of Contents:**
-- [**Basic Syntax**](#basic-syntax)
-- []()
+- [**PYTHON DOCUMENTATION**](#python-documentation)
+  - [**Basic Syntax**](#basic-syntax)
+  - [**Basic Dependencies**](#basic-dependencies)
+  - [**Built-in Dependencies**](#built-in-dependencies)
+  - [**Python Databases**](#python-databases)
+- [**HACKERRANK PRACTICE**](#hackerrank-practice)
+  - [**1. Basic Data Types**](#1-basic-data-types)
 ----
+# **PYTHON DOCUMENTATION**
 ## **Basic Syntax**
 **If Else**
 ```py
