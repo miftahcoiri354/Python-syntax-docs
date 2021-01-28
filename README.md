@@ -1193,6 +1193,7 @@ img=pltimg.imread('mydecisiontree.png')
 imgplot = plt.imshow(img)
 plt.show()
 ```
+## **Python Databases**
 **Python MySQL**
 - `MySQL Connector`: create database, create table, insert, select, where, order by, delete, drop table, update, limit, join
 ```py
