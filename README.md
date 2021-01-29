@@ -22,6 +22,9 @@
       - [**Matplotlib**](#matplotlib)
       - [**Scipy**](#scipy)
       - [**Machine Learning**](#machine-learning)
+      - [**SymPy**](#sympy)
+      - [**NLTK**](#nltk)
+      - [**Statsmodels**](#statsmodels)
   - [**Python Databases**](#python-databases)
       - [**Python MySQL**](#python-mysql)
       - [**Python MongoDB**](#python-mongodb)
@@ -1285,6 +1288,62 @@ graph.write_png('mydecisiontree.png')
 img=pltimg.imread('mydecisiontree.png')
 imgplot = plt.imshow(img)
 plt.show()
+```
+#### **SymPy**
+https://www.tutorialspoint.com/sympy/sympy_quick_guide.htm
+https://docs.sympy.org/latest/tutorial/index.html
+Sympy - Symbolic Computation : sqrt(), integral
+Sympy - Numbers : Float(), Rational(), Integer(), S, I, sqrt, 
+Sympy - Symbols : Symbol, symbols
+Sympy - Substitution : sympy.abc
+Sympy - sympify() function
+Sympy - evalf() function
+Sympy - Lambdify() function
+Sympy - Logical Expressions : BooleanTrue, BooleanFalse, And, Or, Not, Xor, Nand, Nor, Equivalent, ITE
+Sympy - Querying 
+Sympy - Symplification : symplify, expand, factor, collect, cancel, trigsimp, powersimp, combsimp, logcombine
+Sympy - Derivative : diff, sin, exp, Derivative
+Sympy - Integration, Integral Transforms
+Sympy - Matrices : Basic Manipulation, Arithmetic Operations, Matrix Constructors
+Sympy - Function Class : Function for Complex Number, Trigonometric Function, Functions on Integer Number, Combinatoral Functions, Binomial, Miscellaneous Functions, 
+Sympy - Quaternion : add(), mul(), inverse(), pow(), exp()
+Sympy - Solvers : Linear Equation, Non-Linear Equation, Differential Equation
+Sympy - Plotting 
+Sympy - Entities : Point, Line, Triangle, Ellipse
+Sympy - Sets : Union, Intersection, ProductSet, Complement, SymmetricDifference
+Sympy - Printing 
+
+```py
+```
+#### **NLTK**
+https://data-flair.training/blogs/nltk-python-tutorial/
+http://www.nltk.org/howto/
+NLTK Sentence Tokenizer
+NLTK Word Tokenizer
+Find Synonyms from NLTK WordNet
+Find Antonyms from NLTK WordNet
+Stemming NLTK
+Lemmatizing NLTK using WordNet
+NLTK Stop Words
+Speech Tagging
+```py
+```
+#### **Statsmodels**
+https://www.statsmodels.org/v0.10.2/
+https://www.statsmodels.org/v0.10.2/examples/index.html#stats
+Linear Regression 
+Generalized Linear Regression
+Generalized Estimating Equations
+Generalized Additive Models (GAM)
+Robust Linear Models
+Linear Mixed Effects Models
+Regression with Discrete Dependent Variable
+Generalized Linear Mixed Effects Models
+Multiple Regression
+Logistic Regression
+Time Series Analysis
+Statistical Tests
+```py
 ```
 ## **Python Databases**
 #### **Python MySQL**
