@@ -1290,8 +1290,48 @@ imgplot = plt.imshow(img)
 plt.show()
 ```
 #### **SymPy**
-https://www.tutorialspoint.com/sympy/sympy_quick_guide.htm
-https://docs.sympy.org/latest/tutorial/index.html
+**Notebook Documentation:** [Sympy Documentation](https://colab.research.google.com/gist/miftahcoiri354/182d5022a205ed1879603c52837d752f/sympy-documentation.ipynb)
+**Notebook Contents:**
+1. Preliminaries
+2. Introduction
+3. Gotchas
+   - Symbols
+   - Equals Signs (Eq(), simplify())
+   - Two Final Notes (^ and /)
+4. Basic Operations
+   - Substitution
+   - Converting Strings to Sympy Expressions
+5. Printing
+6. Simplification
+   - Simplify
+   - Polynomial/Rational Function Simplification (expand, factor, collect, cancel, apart)
+   - Trigonometric Simplification (trigsimp, expand)
+   - Powers (powersimp, expand_power_exp, powdenest)
+   - Exponential and Logarithms (expand_log, logcombine)
+   - Special Functions (rewrite, expand_func, hyperexpand, combsimp, gammasimp)
+   - Continued Fractions
+7. Calculus
+   - Derivatives
+   - Integral
+   - Limits
+   - Series Expansion
+   - Finite Differences
+8. Solvers
+   - Note anout equations
+   - Solving Equations Algebraically
+   - Solving Differential Equations
+9. Metrices
+   -  Basic Operations (shape, accessing rows and columns, deleting and inserting rows and columns)
+   -  Basic Metoods
+   -  Matrix Constructors
+   -  Advanced Methods (Determinant, RREF, Nullspace, Columnspace, Eigenvalues, Eigenvectors, and Diagonalization)
+   -  Possible Issues 
+10. Advanced Expression Manipulation
+   - Understanding Expression Trees
+   - Recursing through an Expression Tree
+   - Prevent Expression Evaluation
+
+
 Sympy - Symbolic Computation : sqrt(), integral
 Sympy - Numbers : Float(), Rational(), Integer(), S, I, sqrt, 
 Sympy - Symbols : Symbol, symbols
@@ -1313,21 +1353,438 @@ Sympy - Entities : Point, Line, Triangle, Ellipse
 Sympy - Sets : Union, Intersection, ProductSet, Complement, SymmetricDifference
 Sympy - Printing 
 
-```py
-```
+**References:**
+1. https://www.tutorialspoint.com/sympy/sympy_quick_guide.htm
+2. https://docs.sympy.org/latest/tutorial/index.html
+
+
 #### **NLTK**
-https://data-flair.training/blogs/nltk-python-tutorial/
-http://www.nltk.org/howto/
-NLTK Sentence Tokenizer
-NLTK Word Tokenizer
-Find Synonyms from NLTK WordNet
-Find Antonyms from NLTK WordNet
-Stemming NLTK
-Lemmatizing NLTK using WordNet
-NLTK Stop Words
-Speech Tagging
+**Table of Contents:**
+1. Sentence Tokenizer
 ```py
+import nltk
+import nltk.data
+from nltk.tokenize import sent_tokenize
+nltk.download()
+
+parag = "MY name is Miftah. I like Python. I like NLTK. I make tutorials."
+myArr = sent_tokenize(parag)
+#Output: ['My name is Miftah.', 'I like Python.', 'I like NLTK.', 'I make tutorials.']
+tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+myArr = tokenizer.tokenize(parag)
+#Output: ['My name is Miftah.', 'I like Python.', 'I like NLTK.', 'I make tutorials.']
 ```
+2. Word Tokenizer
+```py
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import TreebankWordTokenizer
+from nltk.tokenize import WordPunctTokenizer
+tok2 = TreebankWordTokenizer()
+tok3 = WordPuctTokenizer()
+
+sent1 = "My name is Miftah."
+sent2 = "I won't let you bring cake"
+myArr = word_tokenize(parag)
+#Output: ['My', 'name', 'is', 'Miftah.']
+myArr = word_tokenize(sent2)
+#Output: ["I", "wo", "n't", "let", "you", "bring", "cake"]
+myArr = tok2.tokenize(parag)
+#Output: ['My', 'name', 'is', 'Miftah.']
+myArr = tok2.tokenize(sent2)
+#Output: ["I", "wo", "n't", "let", "you", "bring", "cake"]
+myArr = tok3.tokenize(parag)
+#Output: ['My', 'name', 'is', 'Miftah.']
+myArr = tok3.tokenize(sent2)
+#Output: ["I", "won", "'", "t", "let", "you", "bring", "cake"]
+```
+3. Regexp Tokenizer
+```py
+from nltk.tokenize import regexp_tokenize
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
+tokenizer = RegexpTokenizer("[\w']+")
+
+sent2 = "I won't let you bring cake"
+myArr = word_tokenize(sent2)
+#Output: ["I", "wo", "n't", "let", "you", "bring", "cake"]
+myArr = regexp_tokenize(sent2, "[\w']+")
+#Output: ["I", "won't", "let", "you", "bring", "cake"]
+myArr = regexp_tokenize(sent2, "[\w]+")
+#Output: ["I", "won", "t", "let", "you", "bring", "cake"]
+myArr = regexp_tokenize(sent2, "[\w']")
+#Output: ["I", 'w', 'o', 'n', "'", "t", "l", "e", "t", "y", "o", "u", "b", "r", "i", "n", "g", "c", "a", "k", "e"]
+myArr = tokenizer.tokenize(sent2)
+#Output: ["I", "won't", "let", "you", "bring", "cake"]
+```
+4. Stop Words
+```py
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+ensw = stopwords.words('english')
+
+parag = "What are you doing exactly right now? I wanted to get ot my office."
+myArr = word_tokenize(parag)
+myArr = [word for word in in myArr if word not in ensw]
+#Output: ["What", "exactly", "right", "?", "I", "wanted", "get", "office", "."]
+```
+5. Synsets, Hypernyms, and Hyponyms (wordnet = big dictionary)
+```py
+from nltk.corpus import wordnet
+
+word1 = "weapon"
+synArr = wordnet.sysnsets(word1)
+#Output: [Synset('weapon.n.01'), Synset('weapon.n.02')]    #n = noun
+word_of_interest = synArr[0]
+word_of_interest.definition()
+#Output: 'any instrument or instrumentality used in fighting or hunting'
+word_of_interest.name()
+#Output: "waepon.n.01"
+word_of_interest.pos()
+#Output: "n"
+word_of_interest.hypernyms()
+#Output: [Synset('instrument.n.01')]
+word_of_interest.hyponyms()
+#Output: [bow,bow_and_arrow, brass_knuck, fire_ship, flamethrower, greek_fire......]
+woi = word_of_interest.hyponyms()[1]
+#Output: [Synset('bow_and_arrow.n.01')]
+woi.definition()
+#Output: 'a weapon consisting of arrows and the bow to shoot them'
+```
+6. Lemmas, Synonyms, and Antonyms (use wordnet to lemma, and do synonin or antonim)
+```py
+from nltk.corpus import wordnet
+
+sArr = wordnett.sysnsets('win')
+woi = sArr[2]
+woi.lemmas()
+#Output: [Lemma('win.v.o1.win')]
+woi.lemmas()[0].name()
+#Output: 'win'
+synArr = [lem.name() for syn in sArr for lem in syn.lemmas()]
+#Output: ['win', 'winnings', 'win', 'profits', 'win', 'acquire', 'win', 'gain', 'gain', 'advance', 'win', 'pull_ahead', 'make_headway', 'get_ahead', 'gain_ground', 'succeed', 'win', 'come_through', 'bring_home_the_bacon', 'deliver_the_goods']
+synArr = set(synArr)
+#Output: {'profits', 'acquire', 'advance', 'succeed', 'win', 'come_through', 'bring_home_the_bacon', 'get_ahead', 'make_headway', 'deliver_the_goods', 'gain_ground', 'gain', 'pull_ahead', 'winnings'}
+antArr = set([ant.name() for syn in sArr for lem in syn.lemmas() for ant in lem.antonyms()])
+#Output: {'fall_back', 'losings', 'fail', 'lose'}
+```
+7. Wu Palmer Similarity
+```py
+from nltk.corpus import wordnet
+
+sArr1 = wordnet.synsets('cake')
+sArr2 = wordnet.synsets('loaf')
+sArr3 = wordnet.synsets('bread')
+cake  = sArr1[0]
+loafb = sArr2[0]
+loaf  = sArr2[1]
+bread = sArr3[0]
+#Wu - Palmer Similarity  --> Hypernym Tree (Hypernyms-abstract & Hyponyms-specific)
+cake.wup_similarity(loaf)
+#Output: 0.3076923076923077             #30% similar
+ref = loaf.hypernyms()[0]
+#Output: Synset('food.n.02')
+loaf.shortest_path_distance(ref)
+#Output: 1
+bread.shortest_path_distance(ref)
+#Output: 2
+cake.shortest_path_distance(ref)
+#Output: 8
+```
+8. Path and LCH Similarities
+```py
+from nltk.corpus import wordnet
+
+catArr = wordnet.synsets('cat')
+dogArr = wordnet.synsets('dog')
+doi = dogArr[0]
+coi = catArr[0]
+doi.wup_similarity(coi)
+#Output: 0.8571428571428571    #While, dog and cat is totally different
+doi.path_similarity(coi)
+#Output: 0.2
+doi.path_similarity(doi)
+#Output: 1.0
+doi.lch_similarity(coi)
+#Output: 2.0281
+doi.lch_similarity(doi)
+#Output: 3.6375
+```
+9.  Bigrams
+```py
+from nltk.corpus import webtext
+from nltk.collocations import BigramCollocationFinder
+from nltk.metrics import BigramAssocMeasures
+from nltk.corpus import stopwords
+ignored_words = set(stopwords.words('english'))
+filterStops = lambda w: len(w) < 3 or w in ignored_words
+
+textWords = [w.lower() for w in webtext.words('pirates.txt')]
+finder = BigramCollocationFinder.from_words(textwords)
+finder.nbest(BigramAssocMeasures.likelihood_ratio, 10)
+#Output: [("'", 's'), ('jack', 'sparrow'), (']', '['), ('will', 'turner'), ('sparrow', ':'), ('elizabeth', 'swann'), ('turner', ':'), ('davy', 'jones'), ('swann', ':'), ("'", 't')]
+finder.apply_word_filter(filterStops)
+finder.nbest(BigramAssocMeasures.likelihood_ratio, 10)
+#Output: [('jack', 'sparrow'), ('elizabeth', 'swann'), ('davy', 'jones'), ('flying', 'dutchman'), ('lord', 'cutler'), ('cutler', 'beckett'), ('black', 'pearl'), ('tia', 'dalma'), ('cannibal', 'island'), ('port', 'royal')]
+```
+10. Trigrams
+```py
+from nltk.collocations import TrigramCollocationFinder
+from nltk.metrics import TrigramAssocMeasures
+from nltk.corpus import webtext
+from nltk.corpus import stopwords
+
+textWords = [w.lower() for w in webtext.words('grail.txt')]
+finder = TrigramCollocationFinder.from_words(textWords)
+finder.nbest(TrigramAssocMeasures.likelihood_ratio, 10)
+#Output: [('[', 'boom', ']'), ('[', 'singing', ']'), ('[', 'music', ']'), ('[', 'clang', ']'), ('.', 'arthur', ':'), ('[', 'chanting', ']'), ('[', 'pause', ']'), ('[', 'squeak', ']'), ('[', 'thud', ']'), ('[', 'bonk', ']')]
+filterStops = lambda w: len(w) < 3 or w in ignored_words
+finder.apply_word_filter(filterStops)
+finder.nbest(TrigramAssocMeasures.likelihood_ratio, 10)
+#Output: [('clop', 'clop', 'clop'), ('mumble', 'mumble', 'mumble'), ('squeak', 'squeak', 'squeak'), ('saw', 'saw', 'saw'), ('black', 'knight', 'kills'), ('black', 'knight', 'always'), ('pie', 'iesu', 'domine'), ('clap', 'clap', 'clap'), ('squeak', 'squeak', '...]'), ('...', 'head', 'knight')]
+finder.apply_freq_filter(5)     #filter with minimum appear more than 5 times
+finder.nbest(TrigramAssocMeasures.likelihood_ratio, 10)
+#Output: [('clop', 'clop', 'clop'), ('mumble', 'mumble', 'mumble'), ('squeak', 'squeak', 'squeak'), ('saw', 'saw', 'saw'), ('pie', 'iesu', 'domine'), ('clap', 'clap', 'clap'), ('dona', 'eis', 'requiem'), ('brave', 'sir', 'robin'), ('heh', 'heh', 'heh'), ('king', 'arthur', 'music')]
+```
+11. Stemming
+```py
+from nltk.stem import PorterStemmer
+from nltk.stem import LancasterStemmer
+from nltk.stem import RegexpStemmer
+
+#PosterStemmer --> least aggressive
+pstemmer = PorterStemmer()
+pstemmer.stem('dancing')
+#Output: 'danc'
+pstemmer.stem('dancer')
+#Output: 'dancer'
+pstemmer.stem('dance')
+#Output: 'danc'
+#Lancaster --> good for big data, fast and you better use this
+lstemmer = LancasterStemmer()
+lstemmer.stem('dancing')
+#Outpur: "dant"
+lstemmer.stem('cookery')
+#Output: "cookery"
+#RegexpStemmer --> you can define the words that stemmed in text
+rstemmer = RegexpStemmer('ing')       #it will remove `ing' in words
+rstemmer.stem('skiing')
+#Output: 'ski'
+rstemmer.stem('king')
+#output: 'k'
+```
+12. Lemmatization
+```py
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
+
+lzr = WordNetLemmatizer()
+lzr.lemmatize('dancing')
+#Output: 'dancing'
+lzr.lemmatize('working')
+#Outpu: 'working'
+lzr.lemmatize('dancing', pos='v')
+#Output: 'dance'
+lzr.lemmatize('working', pos='v')
+#Output: 'work'
+stm = PorterStemmer()
+stm.stem('dancing')
+#Output: 'danc'
+lzr.lemmatize('believes')
+#Output: 'belief'
+```
+13. Regular Expression Replacer
+```py
+import re
+
+regex = re.compile(r"don\'t")
+fst = "I don't go to school"
+sst = regex.sub("do not", fst)
+#Output: I do not go to school
+fst = "I won't go there, He's a mad man. He won't end that. He'd have to go now."
+givenpatterns = [(r"won\'t", 'will not'), (r"\'s", ' is'), (r"\'d", " would")]
+
+def replace(text, patterns): 
+  for (raw, rep) in patterns:
+    regex = re.compile(raw)
+    text = regex.sub(rep, text)
+  print(text)
+
+replace(fst, givenpatterns)
+#Output: I will not go there. He is a mad man. He will not end that. He would have to go now.
+```
+You can create it into a mini package as `examplereplacer.py`
+```py
+import re
+
+givenpatterns = [(r"won\'t", 'will not'), (r"\'s", ' is'), (r"\'d", " would")]
+
+class RegexpReplacer(object):
+  def __init__(self):
+    self.patterns = givenpatterns
+  
+  def replace(self, text): 
+    for (raw, rep) in self.patterns:
+      regex = re.compile(raw)
+      text = regex.sub(rep, text)
+    print(text)
+```
+How to call the package
+```py
+from examplereplacer import RegexpReplacer
+
+replacer = RegexpReplacer()
+replacer.replace("He's gone")
+#Output: "He is gone"
+```
+14. Greedy Repeated Characters Replacer
+you can create it in mini package as `examplereplacer.py`
+```py
+import re
+
+class RepeatReplacer(object):
+  def __init__(self):
+    self.regex = re.compile(r'(\w*)(\w)\2(\w*)')
+    self.rep1 = r'\1\2\3'
+  
+  def replace(self, word):
+    loop_res = self.regex_sub(self.rep1, word)
+    if (word == loop_res): return loop_res
+    else : return self.replace(loop_res)
+```
+```py
+from examplereplacer import RepeatReplacer
+
+replacer = RepeatReplacer()
+replacer.replace("maaaaaaaan")
+#output: 'man'
+replacer.replace("book")
+#output: 'bok'
+replacer.replace("cattle")
+#output: 'catle'
+#This function is too greedy
+```
+15. Repeated Characters Replacer with Word Map
+you can create it in mini package as `examplereplacer.py`
+```py
+import re
+from nltk.corpus import wordnet
+
+class RepeatReplacer(object):
+  def __init__(self):
+    self.regex = re.compile(r'(\w*)(\w)\2(\w*)')
+    self.rep1 = r'\1\2\3'
+  
+  def replace(self, word):
+    if wordnet.synsets(word): return word
+    loop_res = self.regex_sub(self.rep1, word)
+    if (word == loop_res): return loop_res
+    else : return self.replace(loop_res)
+```
+```py
+from examplereplacer import RepeatReplacer
+
+replacer = RepeatReplacer()
+replacer.replace("maaaaaaaan")
+#output: 'man'
+replacer.replace("book")
+#output: 'book'
+replacer.replace("catttleee")
+#output: 'cattle'
+```
+16. Synonym Replacement with Word Map
+    you can create it in mini package as `examplereplacer.py`
+```py
+import re
+from nltk.corpus import wordnet
+
+class WordReplacer(object):
+  def __init__(self, word_map):
+    self.word_map = word_map
+  
+  def replace(self, word): 
+    return self.word_map.get(word, word)
+```
+```py
+from examplereplacer import WordReplacer
+
+wordmapboj = {'bday' : 'birtday', 'sup':'wassup', 'marrow':'tomorrow'}
+replacer = WordReplacer(wordmapboj)
+replacer.replace("morrow")
+#output: 'tomorrow'
+```
+17. Negation Replacement
+    you can create it in mini package as `examplereplacer.py`
+```py
+import re
+from nltk.corpus import wordnet
+from nltk.tokenize import word_tokenize
+
+class AntonymReplacer(object):
+  #becuase you didn't need any input to be save, you don't need __init__(self):
+  def replace(self, word): 
+    antonyms = set([antonym.name() for sym in wordnet.synsets(word) for lemma in sys.lemmas() for antonym in lemma.antonyms])
+
+    if len(antonyms) == 1: return antonyms.pop()
+    else: return None
+    
+  def negreplace(self, string):
+    i = 0
+    sent = word_tokenize(string)
+    len_sent = len(sent)
+    words = []
+    fsent = ""
+    while i < len_sent:
+      word = sent[i]
+      if word == 'not' and i+1 < len_sent: 
+        ant = self.replace(sent[i+1])
+        if ant:
+          words.append(ant)
+          fsent += ant
+          i += 2
+          continue
+      words.append(word)
+      fsent += word
+      i += 1
+    return fsent
+```
+```py
+from examplereplacer import AntonymReplacer
+
+rep = AntonymReplacer()
+rep.negreplace("cowardice")
+#output: 'courage'
+rep.negreplace("heavy")
+#output: 'light'
+rep.negreplace("this is not weak")
+#output: 'this is strong'
+```
+18. Custom Corpus Setup
+```py
+import os, os.path
+
+mypath = os.path.expanduser('~/nltk_data')
+
+if not os.path.exists(mypath): 
+  os.mkdir(mypath)
+  print("folder has been created")
+else: 
+  print("folder already exists")
+
+import nltk.data
+
+varbool = mypath in nltk.data.path
+print(varbool)
+#Output: True 
+
+newfile = nltk.data.load('corpora/writing/good.txt', format='raw')
+print(newfile)
+#Output: "What is this?"
+```
+**Tutorial Reference:**
+1. https://www.youtube.com/watch?v=IqPWZL5f-7g&list=PLcTXcpndN-Sl9eYrKM6jtcOTgC52EJnqH
+2. https://www.nltk.org/book/
+3. http://www.nltk.org/howto/
+
 #### **Statsmodels**
 https://www.statsmodels.org/v0.10.2/
 https://www.statsmodels.org/v0.10.2/examples/index.html#stats
