@@ -1784,24 +1784,112 @@ print(newfile)
 1. https://www.youtube.com/watch?v=IqPWZL5f-7g&list=PLcTXcpndN-Sl9eYrKM6jtcOTgC52EJnqH
 2. https://www.nltk.org/book/
 3. http://www.nltk.org/howto/
+4. https://sistemcerdas.mipa.ugm.ac.id/wp-content/uploads/sites/1297/2020/06/Pengenalan-NLTK-Bagian-1.pdf
 
 #### **Statsmodels**
-https://www.statsmodels.org/v0.10.2/
-https://www.statsmodels.org/v0.10.2/examples/index.html#stats
-Linear Regression 
-Generalized Linear Regression
-Generalized Estimating Equations
-Generalized Additive Models (GAM)
-Robust Linear Models
-Linear Mixed Effects Models
-Regression with Discrete Dependent Variable
-Generalized Linear Mixed Effects Models
-Multiple Regression
-Logistic Regression
-Time Series Analysis
-Statistical Tests
+- Linear Regression (OLS)
 ```py
+import statsmodels.formula.api as sm
+from scipy.linalg import toeplitz
+from statsmodels.regression.rolling import RollingOLS
+
+data = sm.datasets.longley.load(as_pandas=False)
+print(data.exog)
+
+#Ordinary Least Squares
+X = sm.add_constant(X)
+model = sm.OLS(y, X).fit()
+lm = sm.ols(formula='Sales ~ TV`, data=data).fit()
+print(lm.summary())
+print(lm.params)
+print(ls.predict())
+#Generalized Least Squares
+ols_resid = sm.OLS(data.endog, data.exog).fit().resid
+resid_fit = sm.OLS(ols_resid[1:], sm.add_constant(ols_resid[:-1])).fit()
+rho = resid_fit.param[1]
+order = toeplitz(range(len(ols_resid)))
+sigma = rho**order
+gls_model = sm.GLS(data.endog, data.exog, sigma=sigma)
+gls_results = gls_model.fit()
+glsar_model = sm.GLSAR(data.endog, data.exog, 1)
+glsar_results = glsar_model.interative_fit(1)
+print(glsar_results.summary())
+#Quantile Regression
+mod = sm.quantreg('foodexp ~ income', data)
+res = mod.fit(q=.5)
+print(res.summary())
+#Recursive Least Squares
+mod = sm.RecursiveLS(endog, exog)
+res = mod.fit()
+mod = sm.RecursiveLS.from_formula('WORLDCONSUMPTION ~ COPPERPRICE + INCOMEINDEX + ALUMPRICE + INVENTORYINDEX', dta, constraints='COPPERPRICE = ALUMPRICE')
+res = mod.fit()
+print(res.summary())
+#Rolling Regression
+rols = RollingOLS(endog, exog, window=60)
+rres = rols.fit()
+fig = rres.plot_recursive_coefficient(variables=['Mkt-RF'], figsize=(14,6))
+mod = RollingOLS.from_formula('HiTec ~ Mkt_RF + SMB + HML', data = data, window=60)
+rres = mod.fit()
 ```
+- Time Series Analysis (ARIMA)
+```py
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np 
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.tsa.arima_model import ARIMA
+%matplotlib inline
+
+shampoo = pd.read_csv('shampoo.csv', index_col=[0], parse_dates=True, squeeze=True)
+
+# Q = 3, p = 2, d = 0-2
+plot_acf(shampoo)       # Q
+plot_pacf(shampoo)      # P
+
+shampoo_train = shampoo[0:25]
+shampoo_test  = shampoo[25:50]
+
+shampoo_model = ARIMA(shampoo_train, order=(3,1,2))
+shampoo_model_fit = shampoo_model.fit()
+shampoo_model_fit.aic       #272.3891 --> lower == better
+shampoo_forecast = shampoo_model_fit.forecast(steps=11)[0]
+np.sqrt(mean_squared_error(shampoo_test, shampoo_forecast))
+
+p_values = range(0,5)
+d_values = range(0,3)
+q_values = range(0,5)
+
+import warnings
+warnings.filterwarnings("ignore")
+for p in p_values:
+    for d in d_values:
+        for d in q_values:
+            order = (p,d,q)
+            train, test = shampoo[0:25], shampoo[25:36]
+            predictions = list()
+            for i in range(len(test)):
+                try:
+                    model = ARIMA(train, order)
+                    model_fit = model.fit(disp=0)
+                    pred_y = model_fit.forecast()[0]
+                    predictions.append(pred_y)
+                    error = mean_squared_error(test, predictions)
+                    print("ARIMA%s RMSE = %.2f" %(order, error))
+                except:
+                    continue
+```
+
+Notebook:
+1. [Tutorial Scikit-Learn, Statsmodels, ARIMA, RandomForest](https://colab.research.google.com/gist/miftahcoiri354/c8984ecee99d98e0960ef63087582345/final_turorial_sklear_statsmodels.ipynb)
+
+References: 
+1. [Linear_Regression_DAT4](https://github.com/justmarkham/DAT4/blob/master/notebooks/08_linear_regression.ipynb)
+2. [Multiple_Linear_Regression](https://www.datarobot.com/blog/multiple-regression-using-statsmodels/)
+3. [Statsmodels](https://mode.com/python-tutorial/libraries/statsmodels/)
+4. [Official_Documentation](https://www.statsmodels.org/dev/examples/index.html#time-series-analysis)
+5. [Official_Docs2](https://www.statsmodels.org/v0.10.2/)
+6. [Time_Series_Modeling_using_Scikit_Pandas_Numpy](https://towardsdatascience.com/time-series-modeling-using-scikit-pandas-and-numpy-682e3b8db8d1)
+
 ## **Python Databases**
 #### **Python MySQL**
 - `MySQL Connector`: create database, create table, insert, select, where, order by, delete, drop table, update, limit, join
