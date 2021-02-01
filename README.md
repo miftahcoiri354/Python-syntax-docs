@@ -6,6 +6,7 @@
       - [**String**](#string)
       - [**List**](#list)
       - [**Dictionary**](#dictionary)
+      - [**Tupple**](#tupple)
       - [**Sets**](#sets)
       - [**Classes/Objects**](#classesobjects)
       - [**Iterators**](#iterators)
@@ -266,7 +267,7 @@ myfamily = {
 ```
 - Link References: [geeksforgeeks.org](https://www.geeksforgeeks.org/python-dictionary/#:~:text=Dictionary%20in%20Python%20is%20an,to%20make%20it%20more%20optimized.)
 
-**Tupple**
+#### **Tupple**
 - Tupple Basic Operation:
 ```py
 t.count(arg)        # returns the number of times a specified value occurs in a tuple       
