@@ -1281,27 +1281,27 @@ plt.show()
    - Recursing through an Expression Tree
    - Prevent Expression Evaluation
 
-
-Sympy - Symbolic Computation : sqrt(), integral
-Sympy - Numbers : Float(), Rational(), Integer(), S, I, sqrt, 
-Sympy - Symbols : Symbol, symbols
-Sympy - Substitution : sympy.abc
-Sympy - sympify() function
-Sympy - evalf() function
-Sympy - Lambdify() function
-Sympy - Logical Expressions : BooleanTrue, BooleanFalse, And, Or, Not, Xor, Nand, Nor, Equivalent, ITE
-Sympy - Querying 
-Sympy - Symplification : symplify, expand, factor, collect, cancel, trigsimp, powersimp, combsimp, logcombine
-Sympy - Derivative : diff, sin, exp, Derivative
-Sympy - Integration, Integral Transforms
-Sympy - Matrices : Basic Manipulation, Arithmetic Operations, Matrix Constructors
-Sympy - Function Class : Function for Complex Number, Trigonometric Function, Functions on Integer Number, Combinatoral Functions, Binomial, Miscellaneous Functions, 
-Sympy - Quaternion : add(), mul(), inverse(), pow(), exp()
-Sympy - Solvers : Linear Equation, Non-Linear Equation, Differential Equation
-Sympy - Plotting 
-Sympy - Entities : Point, Line, Triangle, Ellipse
-Sympy - Sets : Union, Intersection, ProductSet, Complement, SymmetricDifference
-Sympy - Printing 
+Sympy function list:
+- Sympy - Symbolic Computation : sqrt(), integral
+- Sympy - Numbers : Float(), Rational(), Integer(), S, I, sqrt, 
+- Sympy - Symbols : Symbol, symbols
+- Sympy - Substitution : sympy.abc
+- Sympy - sympify() function
+- Sympy - evalf() function
+- Sympy - Lambdify() function
+- Sympy - Logical Expressions : BooleanTrue, BooleanFalse, And, Or, Not, Xor, Nand, Nor, Equivalent, ITE
+- Sympy - Querying 
+- Sympy - Symplification : symplify, expand, factor, collect, cancel, trigsimp, powersimp, combsimp, logcombine
+- Sympy - Derivative : diff, sin, exp, Derivative
+- Sympy - Integration, Integral Transforms
+- Sympy - Matrices : Basic Manipulation, Arithmetic Operations, Matrix Constructors
+- Sympy - Function Class : Function for Complex Number, Trigonometric Function, Functions on Integer Number, Combinatoral Functions, - - Binomial, Miscellaneous Functions, 
+- Sympy - Quaternion : add(), mul(), inverse(), pow(), exp()
+- Sympy - Solvers : Linear Equation, Non-Linear Equation, Differential Equation
+- Sympy - Plotting 
+- Sympy - Entities : Point, Line, Triangle, Ellipse
+- Sympy - Sets : Union, Intersection, ProductSet, Complement, SymmetricDifference
+- Sympy - Printing 
 
 **References:**
 1. https://www.tutorialspoint.com/sympy/sympy_quick_guide.htm
@@ -1657,7 +1657,7 @@ class WordReplacer(object):
 ```py
 from examplereplacer import WordReplacer
 
-wordmapboj = {'bday' : 'birtday', 'sup':'wassup', 'marrow':'tomorrow'}
+wordmapboj = {'bday' : 'birtday', 'sup':'wassup', 'morrow':'tomorrow'}
 replacer = WordReplacer(wordmapboj)
 replacer.replace("morrow")
 #output: 'tomorrow'
@@ -1976,7 +1976,6 @@ for x in myresult: print(x)
 ```
 
 ## **Visualization Dependencies**
-#### **Matplotlib**
 #### **Matplotlib**
 ```py
 import numpy as np
