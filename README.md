@@ -19,7 +19,6 @@
   - [**Built-in Dependencies**](#built-in-dependencies)
       - [**NumPy**](#numpy)
       - [**Pandas**](#pandas)
-      - [**Matplotlib**](#matplotlib)
       - [**Scipy**](#scipy)
       - [**Machine Learning**](#machine-learning)
       - [**SymPy**](#sympy)
@@ -28,6 +27,11 @@
   - [**Python Databases**](#python-databases)
       - [**Python MySQL**](#python-mysql)
       - [**Python MongoDB**](#python-mongodb)
+  - [**Visualization Dependencies**](#visualization-dependencies)
+      - [**Matplotlib**](#matplotlib)
+      - [**Altair**](#altair)
+      - [**Plotly**](#plotly)
+      - [**Reportlab**](#reportlab)
 - [**TUTORIAL PRACTICE**](https://github.com/miftahcoiri354/Python-syntax-docs)
   - [**Tutorial Deployment Heroku**](https://github.com/miftahcoiri354/Python-syntax-docs/tree/main/Tutorial_Deployment_Heroku)
   - [**Tutorial NGINX**](https://github.com/miftahcoiri354/Python-syntax-docs/tree/main/Tutorial_NGINX)
@@ -798,72 +802,6 @@ df = df.drop_duplicates(inplace = True)
 for x in df.index: df.loc[x, "Duration"] = 120 if df.loc[x, "Duration"] > 120
 for x in df.index: df.drop(x, inplace = True) if df.loc[x, "Duration"] > 120
 ```
-#### **Matplotlib**
-```py
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-colors = np.array(["red","green","blue","yellow","pink","black","orange","purple","beige","brown","gray","cyan","magenta"])
-sizes = np.array([20,50,100,200,500,1000,60,90,10,300,600,800,75])
-mylabels = ["Apples", "Bananas", "Cherries", "Dates"]
-myexplode = [0.2, 0, 0, 0]
-
-df = pd.read_csv('data.csv')
-xpoints = np.array([1, 2, 6, 8])
-ypoints = np.array([3, 8, 1, 10])
-x1 = np.array([0, 1, 2, 3])
-y1 = np.array([3, 8, 1, 10])
-x2 = np.array([0, 1, 2, 3])
-y2 = np.array([6, 2, 7, 11])
-
-df.plot()
-df.plot(kind = 'scatter', x = 'Duration', y = 'Calories')
-df["Duration"].plot(kind = 'hist')
-plt.plot(xpoints, ypoints)
-plt.plot(xpoints, ypoints, 'o')
-plt.plot(ypoints, marker = 'o')
-plt.plot(ypoints, marker = '*')
-plt.plot(ypoints, linestyle = 'dotted')
-plt.plot(ypoints, linestyle = 'dashed')
-plt.plot(ypoints, color = 'r')
-plt.plot(ypoints, c = '#4CAF50')
-plt.plot(ypoints, linewidth = '20.5')
-plt.plot(y1)
-plt.plot(y2)
-plt.plot(x1, y1, x2, y2)
-plt.title("Sports Watch Data", fontdict = font1, loc = 'left')
-plt.xlabel("Average Pulse", fontdict = font2)
-plt.ylabel("Calorie Burnage", fontdict = font2)
-plt.grid(axis = 'x')
-plt.grid(axis = 'y')
-plt.grid(color = 'green', linestyle = '--', linewidth = 0.5)
-plt.subplot(1, 2, 1)
-plt.plot(x,y)
-plt.subplot(1, 2, 2)
-plt.plot(x,y)
-plt.suptitle("MY SHOP")
-plt.scatter(x, y, color = '#88c999')
-plt.scatter(x, y, c=colors)
-plt.scatter(x, y, c=colors, cmap='viridis')
-plt.scatter(x, y, s=sizes)
-plt.scatter(x, y, s=sizes, alpha=0.5)
-plt.scatter(x, y, c=colors, s=sizes, alpha=0.5, cmap='nipy_spectral')
-plt.bar(x,y)
-plt.bar(x, y, color = "red")
-plt.bar(x, y, color = "#4CAF50")
-plt.hist(x)
-plt.pie(y)
-plt.pie(y, lables = mylabels)
-plt.pie(y, lables = mylabels, startangle = 90)
-plt.pie(y, lables = mylabels, explode = myexplode)
-plt.pie(y, lables = mylabels, explode = myexplode, shadow = True)
-plt.pie(y, labels = mylabels, colors = mycolors)
-plt.colorbar()
-plt.legend(title = "Four Fruits:")
-plt.show()
-```
-
 #### **Scipy**
 - `Scipy Constants:` As SciPy is more focused on scientific implementations, it provides many built-in scientific constants. 
 ```py
@@ -2035,6 +1973,82 @@ for x in mycol.find(): print(x)
 myresult = mycol.find().limit(5)
 for x in myresult: print(x)
 ```
+  - [**Visualization Dependencies**](#visualization-dependencies)
+      - [**Matplotlib**](#matplotlib)
+      - [**Altair**](#altair)
+      - [**Plotly**](#plotly)
+      - [**Reportlab**](#reportlab)
+## **Visualization Dependencies**
+#### **Matplotlib**
+#### **Matplotlib**
+```py
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+colors = np.array(["red","green","blue","yellow","pink","black","orange","purple","beige","brown","gray","cyan","magenta"])
+sizes = np.array([20,50,100,200,500,1000,60,90,10,300,600,800,75])
+mylabels = ["Apples", "Bananas", "Cherries", "Dates"]
+myexplode = [0.2, 0, 0, 0]
+
+df = pd.read_csv('data.csv')
+xpoints = np.array([1, 2, 6, 8])
+ypoints = np.array([3, 8, 1, 10])
+x1 = np.array([0, 1, 2, 3])
+y1 = np.array([3, 8, 1, 10])
+x2 = np.array([0, 1, 2, 3])
+y2 = np.array([6, 2, 7, 11])
+
+df.plot()
+df.plot(kind = 'scatter', x = 'Duration', y = 'Calories')
+df["Duration"].plot(kind = 'hist')
+plt.plot(xpoints, ypoints)
+plt.plot(xpoints, ypoints, 'o')
+plt.plot(ypoints, marker = 'o')
+plt.plot(ypoints, marker = '*')
+plt.plot(ypoints, linestyle = 'dotted')
+plt.plot(ypoints, linestyle = 'dashed')
+plt.plot(ypoints, color = 'r')
+plt.plot(ypoints, c = '#4CAF50')
+plt.plot(ypoints, linewidth = '20.5')
+plt.plot(y1)
+plt.plot(y2)
+plt.plot(x1, y1, x2, y2)
+plt.title("Sports Watch Data", fontdict = font1, loc = 'left')
+plt.xlabel("Average Pulse", fontdict = font2)
+plt.ylabel("Calorie Burnage", fontdict = font2)
+plt.grid(axis = 'x')
+plt.grid(axis = 'y')
+plt.grid(color = 'green', linestyle = '--', linewidth = 0.5)
+plt.subplot(1, 2, 1)
+plt.plot(x,y)
+plt.subplot(1, 2, 2)
+plt.plot(x,y)
+plt.suptitle("MY SHOP")
+plt.scatter(x, y, color = '#88c999')
+plt.scatter(x, y, c=colors)
+plt.scatter(x, y, c=colors, cmap='viridis')
+plt.scatter(x, y, s=sizes)
+plt.scatter(x, y, s=sizes, alpha=0.5)
+plt.scatter(x, y, c=colors, s=sizes, alpha=0.5, cmap='nipy_spectral')
+plt.bar(x,y)
+plt.bar(x, y, color = "red")
+plt.bar(x, y, color = "#4CAF50")
+plt.hist(x)
+plt.pie(y)
+plt.pie(y, lables = mylabels)
+plt.pie(y, lables = mylabels, startangle = 90)
+plt.pie(y, lables = mylabels, explode = myexplode)
+plt.pie(y, lables = mylabels, explode = myexplode, shadow = True)
+plt.pie(y, labels = mylabels, colors = mycolors)
+plt.colorbar()
+plt.legend(title = "Four Fruits:")
+plt.show()
+```
+
+#### **Altair**
+#### **Plotly**
+#### **Reportlab**
 -----
 # **HACKERRANK PRACTICE**
 ## **1. Basic Data Types**
