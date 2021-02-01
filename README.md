@@ -1973,11 +1973,7 @@ for x in mycol.find(): print(x)
 myresult = mycol.find().limit(5)
 for x in myresult: print(x)
 ```
-  - [**Visualization Dependencies**](#visualization-dependencies)
-      - [**Matplotlib**](#matplotlib)
-      - [**Altair**](#altair)
-      - [**Plotly**](#plotly)
-      - [**Reportlab**](#reportlab)
+
 ## **Visualization Dependencies**
 #### **Matplotlib**
 #### **Matplotlib**
