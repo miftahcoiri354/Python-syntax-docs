@@ -1,3 +1,3 @@
-# **Tutorial fastAPI + SQLite Database
+# **Tutorial fastAPI + SQLite Database**
 
-Link Tutorial: [SQLite Database Design and SQLAlchemy](https://www.youtube.com/watch?v=02L8meNM0MU)
+Link Tutorial: [SQLite Database Design and SQLAlchemy](https://www.youtube.com/watch?v=HVZUJb1_Jm8)
