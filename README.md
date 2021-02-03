@@ -2,6 +2,7 @@
 - [**PYTHON DOCUMENTATION**](#python-documentation)
   - [**Basic Syntax**](#basic-syntax)
       - [**If Else**](#if-else)
+      - [**For**](#for)
       - [**Function**](#function)
       - [**String**](#string)
       - [**List**](#list)
@@ -44,13 +45,23 @@
   - [**Tutorial PostgreSQL TimescaleDB**](https://github.com/miftahcoiri354/Python-syntax-docs/tree/main/Tutorial_postgresql_timescaledb)
   - [**Tutorial Redis**](https://github.com/miftahcoiri354/Python-syntax-docs/tree/main/Tutorial_Redis)
   - [**Tutorial SQLAlchemy**](https://github.com/miftahcoiri354/Python-syntax-docs/tree/main/Tutorial_Docker_Beginner)
-- [**HACKERRANK PRACTICE**](#hackerrank-practice)
-  - [**1. Basic Data Types**](#1-basic-data-types)
-      - [**Input Data**](#input-data)
-      - [**Basic Calculation**](#basic-calculation)
-      - [**List Comprehensions**](#list-comprehensions)
-      - [**Nested List**](#nested-list)
-      - [**list dictionary**](#list-dictionary)
+- [**HACKERRANK PRACTICE**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices)
+  - [**1. Basic Data Types**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/1_Basic_Data_Types)
+  - [**2. Strings**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/2_Strings)
+  - [**3. Sets**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/3_Sets)
+  - [**4. Math**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/4_Math)
+  - [**5. Itertools**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/5_Itertools)
+  - [**6. Collections**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/6_Collections)
+  - [**7. Date and Exceptions**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/7_Date_and_Exceptions)
+  - [**8. Errors and Exceptions**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/8_Errors_and_Exceptions)
+  - [**9. Classes**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/9_Classes)
+  - [**10. Built_Ins**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/10_Built_Ins)
+  - [**11. Python Functions**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/11_Python_Functions)
+  - [**12. Regex and Parsing**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/12_Regex_and_Parsing)
+  - [**13. XML**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/13_XML)
+  - [**14. Closures and Decorators**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/14_Closures_and_Decorators)
+  - [**15. Numpy**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/15_Numpy)
+  - [**16. Debugging**](https://github.com/supertypeai/Python-syntax-docs/tree/main/HackerRank_Practices/16_Debugging)
 ----
 # **PYTHON DOCUMENTATION**
 ## **Basic Syntax**
@@ -59,6 +70,11 @@
 if a > b: print("a is greater than b")
 print("A") if a > b else print("B")
 print("A") if a > b else print("=") if a == b else print("B")
+```
+#### **For**
+```py
+import re
+[print('YES' if re.match(r'[789]\d{9}$',input()) else 'NO') for _ in range(int(input()))]
 ```
 #### **Function**
 ```py
@@ -2045,51 +2061,3 @@ plt.show()
 #### **Altair**
 #### **Plotly**
 #### **Reportlab**
------
-# **HACKERRANK PRACTICE**
-## **1. Basic Data Types**
-#### **Input Data**
-```python
-a = input()
-a = int(input())
-a = int(raw_input())
-a = int(raw_input("input any integer:"))
-```
-
-#### **Basic Calculation**
-```python
-pembagian = a/b
-pembulatan = a//b
-habis_dibagi = a%b
-```
-
-#### **List Comprehensions**
-```python
-x, y, z, n = [int(raw_input()) for _ in range(4)]
-array_list = [[xx,yy,zz] for xx in range(x+1) for yy in range(y+1) for zz in range(z+1)]
-array_list_final = [array for array in array_list if array[0]+array[1]+array[2] != n]  
-```
-
-#### **Nested List**
-```python
-student_list = [[input(), float(input())] for _ in range(int(input()))]
-unique_score = [score for score in set([list[1] for list in student_list])]
-unique_score.sort()
-lowest_scores = unique_score[1:2]
-    
-group_list = [list[0] for score in lowest_scores for list in student_list if list[1] == score]
-group_list.sort()
-for x in group_list:
-    print(x)
-```
-
-#### **list dictionary**
-```python
-students_data = [raw_input().split() for _ in range(int(raw_input()))]
-name_list, scores_list = [line[0], line[1:] for line in students_data]
-student_marks = {student_marks[name] = map(float, scores) for scores in scorelist for name in name_list}
-```
-```python
-x = { row.SITE_NAME : row.LOOKUP_TABLE for row in cursor }
-```
-
