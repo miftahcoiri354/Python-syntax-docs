@@ -2133,23 +2133,933 @@ def clearcart():
         print(e)
 ```
 ### **29. Create customer registration form with python**
+Now we will work for customer data. before to do that, you may create a new folder named `customers` and create `form.py`.
+```py
+#customers/form.py
+from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from flask_wtf.file import FileRequired, FileAllowed, FileField
 
+class CustomerRegisterForm(FlaskForm):
+    name = StringField('Name: ')
+    username = StringField('Username: ', [validators.DataRequired()])
+    email = StringField('Email: ', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('Password: ', [validators.DataRequired(), validators.EqualTo('confirm', message=' Both password must match! ')])
+    confirm = PasswordField('Repeat Password: ', [validators.DataRequired()])
+    country = StringField('Country: ', [validators.DataRequired()])
+    city = StringField('City: ', [validators.DataRequired()])
+    contact = StringField('Contact: ', [validators.DataRequired()])
+    address = StringField('Address: ', [validators.DataRequired()])
+    zipcode = StringField('Zip code: ', [validators.DataRequired()])
+
+    profile = FileField('Profile', validators=[FileAllowed(['jpg','png','jpeg','gif'], 'Image only please')])
+    submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        if Register.query.filter_by(username=username.data).first():
+            raise ValidationError("This username is already in use!")
+
+    def validate_email(self, email):
+        if Register.query.filter_by(email=email.data).first():
+            raise ValidationError("This email address is already in use!")
+```
+Create another new file `customers/routes.py`.
+```py
+from flask import render_template,session, request,redirect,url_for,flash,current_app,make_response
+from shop import app,db,photos
+from .forms import CustomerRegisterForm
+import secrets
+import os
+
+
+def customer_register():
+    return render_template('customer/register.html')
+```
 ### **30. Create customer regirstation template form**
+In here we will create the registration form.
+```py
+#customers/routes.py
+from flask import render_template,session, request,redirect,url_for,flash,current_app,make_response
+from shop import app,db,photos, bcrypt
+from .forms import CustomerRegisterForm
+import secrets
+import os
+
+@app.route('/customer/register', methods=['GET','POST'])
+def customer_register():
+    form = CustomerRegisterForm()
+    return render_template('customer/register.html', form=form)
+```
+```py
+#__init__.py
+from shop.customers import routes
+```
+```html
+<!-- customer/register.html -->
+{% extends "layout.html" %}
+{% block content %}
+
+<!--============ REGISTRATION FORM ==============-->
+{% from "_formhelpers.html" import render_field %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1 class="bg-info text-center">Register</h1>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                {{ render_field(form.name, class="form-control")}}
+                {{ render_field(form.username,class="form-control")}}
+                {{ render_field(form.email,class="form-control")}}
+                {{ render_field(form.password, class="form-control")}}
+                {{ render_field(form.confirm ,class="form-control")}}
+                {{ form.profile() }}
+            </div>
+            <div class="col-md-4">
+                {{ render_field(form.country,class="form-control")}}
+                {{ render_field(form.city, class="form-control")}}
+                {{ render_field(form.contact, class="form-control")}}
+                {{ render_field(form.address, class="form-control")}}
+                {{ render_field(form.zipcode, class="form-control")}}
+                {{ form.submit(class="btn btn-sm btn-info float-right") }}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
+```
 
 ### **31. Create customer registration model**
+In here we wll create the customer registration model, so you need to create the model.py
+In here you need to install `flask_login` library.
+```
+> pipenv install flask_login
+```
+```py
+#customers/model.py
+from shop import db
+from datetime import datetime
+from flask_login import UserMixin
+import json
+
+class Register(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key= True)
+    name = db.Column(db.String(50), unique= False)
+    username = db.Column(db.String(50), unique= True)
+    email = db.Column(db.String(50), unique= True)
+    password = db.Column(db.String(200), unique= False)
+    country = db.Column(db.String(50), unique= False)
+    # state = db.Column(db.String(50), unique= False)
+    city = db.Column(db.String(50), unique= False)
+    contact = db.Column(db.String(50), unique= False)
+    address = db.Column(db.String(50), unique= False)
+    zipcode = db.Column(db.String(50), unique= False)
+    profile = db.Column(db.String(200), unique= False , default='profile.jpg')
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Register %r>' % self.name
+
+db.create_all()
+```
+```py
+#customers/routes.py
+from .model import Register
+
+@app.route('/customer/register', methods=['GET','POST'])
+def customer_register():
+    form = CustomerRegisterForm()
+    if form.validate_on_submit():
+        hash_password = bcrypt.generate_password_hash(form.password.data)
+        register = Register(name=form.name.data, username=form.username.data, email=form.email.data,password=hash_password,country=form.country.data, city=form.city.data,contact=form.contact.data, address=form.address.data, zipcode=form.zipcode.data)
+        db.session.add(register)
+        flash(f'Welcome {form.name.data} Thank you for registering', 'success')
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('customer/register.html', form=form)
+```
 
 ### **32. Form validation & user login**
+To protect and validating the form you can add the following python and html script.
+```py
+#customers/forms.py
+from flask import ValidationError
+from .model import Register
 
+class CustomerRegisterForm(FlaskForm):
+    ...
+
+    def validate_username(self, username):
+        if Register.query.filter_by(username=username.data).first():
+            raise ValidationError("This username is already in use!")
+
+    def validate_email(self, email):
+        if Register.query.filter_by(email=email.data).first():
+            raise ValidationError("This email address is already in use!")
+```
+```html
+<!-- customer/register.html -->
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div class="row">
+```
+Then we can go to customer login
+```py
+#customers/forms.py
+class CustomerLoginFrom(FlaskForm):
+    email = StringField('Email: ', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('Password: ', [validators.DataRequired()])
+```
+And create new `customer/login.html`.
+```html
+<!-- customer/login.html -->
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="text-center bg-info p-2 h4">Login</div>
+            {% from "_formhelpers.html" import render_field %}
+            {% include '_messages.html' %}
+            <form method=post>
+                {{form.csrf_token}}
+                <div>
+                    {{ render_field(form.email, class="form-control") }}
+                    {{ render_field(form.password, class="form-control") }}
+                </div>
+                <p><input type="submit" value="Login" class="btn-info">
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% endblock content %}
+```
+Then in here you need to install `flask-login` library
+```
+> pipenv install flask-login
+```
+Then go to `__ini__.py`
+```py
+#__init__.py
+from flask_login import LoginManager
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view='customerLogin'
+login_manager.needs_refresh_message_category='danger'
+login_manager.login_message = u"Please login first"
+```
+```py
+#customers/routes.py
+from flask_login import login_required, current_user, logout_user, login_user
+from shop import login_manager
+from .forms import CustomerLoginFrom
+
+@app.route('/customer/login', methods=['GET','POST'])
+def customerLogin():
+    form = CustomerLoginFrom()
+    if form.validate_on_submit():
+        user = Register.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash('You are login now!', 'success')
+            next = request.args.get('next')
+            return redirect(next or url_for('home'))
+        flash('Incorrect email and password','danger')
+        return redirect(url_for('customerLogin'))
+    return render_template('customer/login.html', form=form)
+```
+```py
+#customer/model.py
+from shop import login_manager
+
+@login_manager.user_loader
+def user_loader(user_id):
+    return Register.query.get(user_id)
+```
 ### **33. How to logout user in flask**
-
+```py
+#customers/routes.py
+@app.route('/customer/logout')
+def customer_logout():
+    logout_user()
+    return redirect(url_for('home'))
+```
+```html
+<!-- _navbar.html -->
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">{{current_user.name}}</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{url_for('customer_logout')}}" class="nav-link"> Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a href="{{url_for('customer_register')}}" class="nav-link">Sign up</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{url_for('customerLogin')}}" class="nav-link">login</a>
+                </li>
+                {% endif %}
+```
 ### **34. SQLAlchemy Migrations using Flask-Migrate**
+In this we will learn flask-migrate, first install `Flask-Migrate`.
+```
+> pipenv install flask-migrate
+```
+Migration is the way to move your current database to new database with defined/new columns. So for example, you have db table model and try to move the table into new one and create new column in it, then you can use migration.
+```py
+#__init__.py
+from flask_migrate import Migrate
+
+migrate = Migrate(app, db)
+```
+For example you migrate your model and create new column, in here we have two condition, first the column should provide null, and second if the column not accept null then you need to provide default value.
+```py
+class Register(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key= True)
+    name = db.Column(db.String(50), unique= False)
+    f_name = db.Column(db.String(50), unique= False)
+    ...
+```
+Then try
+```
+> flask db init
+Error: couln't locate a flask application. You did not provide the "FLASK_APP" environment variable, and a "wsgi.py" or "app.py" module not found in the current directory.
+```
+So to tackle that you need to set.
+```
+> export FLASK_APP=run.py
+> flask db init
+migration done....
+```
+Then you will get new directory called `migrations`, then if you go to inside the `shop/myshop2.db` and you will get all tables. If we do the migrate, then we will see the another table. To check that, then do the following section.
+```
+> flask db migrate -m "initial migrations"
+INFO  [alembic.autogenerate.compare] Detected NULL on column 'addproduct.brand_id'
+INFO  [alembic.autogenerate.compare] Detected added column 'register.f_name'
+
+> flask db upgrade
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) near "ALTER": syntax error
+[SQL: ALTER TABLE addproduct ALTER COLUMN brand_id DROP NOT NULL]
+```
+If you facing a error while doing this migration, you can check the following solution [link](https://medium.com/the-andela-way/alembic-how-to-add-a-non-nullable-field-to-a-populated-table-998554003134) or [link](https://www.compose.com/articles/schema-migrations-with-alembic-python-and-postgresql/)
+- To solve this issues, you need change the following original script
+```py
+#migrations/versions/78b74039ca9a.py
+"""initial migrations
+
+Revision ID: 78b74039ca9a
+Revises:
+Create Date: 2021-02-19 09:03:18.838811
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+
+# revision identifiers, used by Alembic.
+revision = '78b74039ca9a'
+down_revision = None
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.alter_column('addproduct', 'brand_id',
+               existing_type=sa.INTEGER(),
+               nullable=True)
+    op.add_column('register', sa.Column('f_name', sa.String(length=50), nullable=True))
+    # ### end Alembic commands ###
+
+
+def downgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_column('register', 'f_name')
+    op.alter_column('addproduct', 'brand_id',
+               existing_type=sa.INTEGER(),
+               nullable=False)
+    # ### end Alembic commands ###
+```
+Honestly, I'm still can't migrate the multiple db using flask migrate. But the error solved, because we set the nullable at `brand_id` set to `True`, so we need to set it `False`.
+```
+> flask db init
+> flask db migrate -m "Initial migration"
+> flask db upgrade
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 05e76e6570e0, initial migrations
+> cd shop
+> sqlite3 myshop2.db
+
+sqlite> .tables
+addproduct       brand            register
+alembic_version  category         user
+sqlite> pragma table_info(register);
+0|id|INTEGER|1||1
+1|name|VARCHAR(50)|0||0
+2|username|VARCHAR(50)|0||0
+3|email|VARCHAR(50)|0||0
+4|password|VARCHAR(200)|0||0
+5|country|VARCHAR(50)|0||0
+6|city|VARCHAR(50)|0||0
+7|contact|VARCHAR(50)|0||0
+8|address|VARCHAR(50)|0||0
+9|zipcode|VARCHAR(50)|0||0
+10|profile|VARCHAR(200)|0||0
+11|date_created|DATETIME|1||0
+12|f_name|VARCHAR(50)|0||0
+```
+```py
+#__init__.py
+with app.app_context():
+    if db.engine.url.drivername == "sqlite":
+        migrate.init_app(app, db, render_as_batch=True)
+    else:
+        migrate.init_app(app, db)
+```
+If you going to bring it back, you need to remove and drop the table `alembic_version`. First delete the `migrations` folder, and then drop the `alembic_version` table. But, when you go to the register table, the new column still exist.
+```
+sqlite> DROP TABLE alembic_version;
+sqlite> pragma table_info(register);
+0|id|INTEGER|1||1
+1|name|VARCHAR(50)|0||0
+2|username|VARCHAR(50)|0||0
+3|email|VARCHAR(50)|0||0
+4|password|VARCHAR(200)|0||0
+5|country|VARCHAR(50)|0||0
+6|city|VARCHAR(50)|0||0
+7|contact|VARCHAR(50)|0||0
+8|address|VARCHAR(50)|0||0
+9|zipcode|VARCHAR(50)|0||0
+10|profile|VARCHAR(200)|0||0
+11|date_created|DATETIME|1||0
+12|f_name|VARCHAR(50)|0||0
+```
+Then you need to initiate it from the beginning again.
+```
+> flask db init
+> flask db migrate -m "initial migrations"
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected removed column 'register.f_name'
+
+> flask db upgrade
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 970b26492c93, initial migrate
+```
+Because you already create the condition in `__init__.py`, so if you try to add the new column it will be no problem.
+```py
+#customers/model.py
+class Register(db.Model, UserMixin):
+    f_name = db.Column(db.String(50), unique= False)
+```
+```
+> flask db migrate -m "initial migrations"
+> flask db upgrade
+```
+So, in here you can do multiple update delete column without having any error.
 
 ### **35. Create customer order table**
+```py
+#customers/model.py
+import json
+
+class JsonEcodedDict(db.TypeDecorator):
+    impl = db.Text
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return '{}'
+        else:
+            return json.dumps(value)
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return {}
+        else:
+            return json.loads(value)
+
+class CustomerOrder(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    invoice = db.Column(db.String(20), unique=True, nullable=False)
+    status = db.Column(db.String(20), default='Pending', nullable=False)
+    customer_id = db.Column(db.Integer, unique=False, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    orders = db.Column(JsonEcodedDict)
+
+    def __repr__(self):
+        return'<CustomerOrder %r>' % self.invoice
+```
 
 ### **36. Insert customer order into table as json**
 
+```py
+#customers/routes.py
+from .model import CustomerOrder
+import json
+
+@app.route('/getorder')
+@login_required
+def get_order():
+    if current_user.is_authenticated:
+        customer_id = current_user.id
+        invoice = secrets.token_hex(5)
+        updateshoppingcart
+        try:
+            order = CustomerOrder(invoice=invoice,customer_id=customer_id,orders=session['Shoppingcart'])
+            db.session.add(order)
+            db.session.commit()
+            session.pop('Shoppingcart')
+            flash('Your order has been sent successfully','success')
+            return redirect(url_for('orders',invoice=invoice))
+        except Exception as e:
+            print(e)
+            flash('Some thing went wrong while get order', 'danger')
+            return redirect(url_for('getCart'))
+```
+```html
+<!-- carts.html -->
+<table class="table table-sm">
+            <tr>
+                <td> <a href="{{url_for('get_order')}}" class="btn btn-success"> Order now </a> </td>
+                <td width="35%"></td>
+                <td> <h5>Tax: ${{tax}}</h5></td>
+                <td> <h5>Grand total: ${{grandtotal}}</h3> </td>
+                <td> <a href="{{url_for('clearcart')}}" class="btn btn-danger btn-sm float-right mr-4"> Clear cart</a> </td>
+            </tr>
+        </table>
+```
 ### **37. Display customer orders**
+```py
+#customers/routes.py
+@app.route('/orders/<invoice>')
+@login_required
+def orders(invoice):
+    if current_user.is_authenticated:
+        grandTotal = 0
+        subTotal = 0
+        customer_id = current_user.id
+        customer = Register.query.filter_by(id=customer_id).first()
+        orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+        for _key, product in orders.orders.items():
+            discount = (product['discount']/100) * float(product['price'])
+            subTotal += float(product['price']) * int(product['quantity'])
+            subTotal -= discount
+            tax = ("%.2f" % (.06 * float(subTotal)))
+            grandTotal = ("%.2f" % (1.06 * float(subTotal)))
 
+    else:
+        return redirect(url_for('customerLogin'))
+    return render_template('customer/order.html', invoice=invoice, tax=tax,subTotal=subTotal,grandTotal=grandTotal,customer=customer,orders=orders)
+```
+```html
+<!-- customer/order.html -->
+{% extends 'layout.html' %}
+{% block content %}
+
+<!--=============== ORDER PAGE ====================-->
+
+{% include '_navbar.html' %}
+<div class="container mt-4">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-12">
+            Inoice: {{orders.invoice}}
+            <br>
+            Status: {{orders.status}}
+            <br>
+            Customer name: {{customer.name}}
+            <br>
+            Customer email: {{customer.email}}
+            <br>
+            Customer contact: {{customer.contact}}
+            <br>
+            <br>
+            <table class="table table-sm">
+                <thead>
+                    <th>Sr</th>
+                    <th>Name</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Discount</th>
+                    <th>Subtotal</th>
+                </thead>
+                <tbody>
+                    {% for key, product in orders.orders.items() %}
+                    {% set discount =(product.discount/100) * product.price|float %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{product.name}}</td>
+                        <form action="{{url_for('updatecart', code=key)}}" method="post">
+                            <td>{{product.color|capitalize}}</td>
+                            <td>${{"%.2f"|format(product.price)}}</td>
+                            <td> {{product.quantity}} </td>
+                            {% if product.discount  %}
+                            <td>{{product.discount}} % &nbsp; &nbsp; is {{"%.2f"|format(discount)}}</td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            {% set subtotal = product.quantity|int * product.price|float  %}
+                            <td>${{"%.2f"|format(subtotal - discount|round(1,'floor')) }}</td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table class="table table-sm">
+                <tr>
+                    <td>
+                        {% if orders.status =='Paid' %}
+                        {% else %}
+                        <form action="#" method="POST">
+                            {% set amount =  grandTotal.replace('.','') %}
+                            <input type="hidden" name="amount" value="{{amount}}">
+                            <input type="hidden" name="invoice" value="{{orders.invoice}}">
+                            <script src="https://checkout.stripe.com/checkout.js"
+                            class="stripe-button"
+                            data-key="pk_test_MaILxTYQ15v5Uhd6NKI9wPdD00qdL0QZSl"
+                            data-name="{{customer.name}}"
+                            data-description="myshop parchase"
+                            data-amount="{{amount}}"
+                            data-currency="usd">
+                            </script>
+                        </form>
+                        {% endif %}
+                    </td>
+                    <td width="35%"></td>
+                    <td> <h5>Tax: ${{tax}}</h5></td>
+                    <td> <h5>Grand total: ${{grandTotal}}</h3> </td>
+                    <td>
+                        <form action="#" method="post">
+                            <button type="submit" class="btn btn-info"> Get pdf</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+```
 ### **38. How to generate Dynamic PDF using Flask**
+To create pdf using rendered html page, you can use wkhtmltopdf, to do that you can install it using pip
+```
+> pipenv install wkhtmltopdf
+> pipenv install pdfkit
+```
+Befor you start, you need to install the `wkhtmltopdf` installer from this [link](https://wkhtmltopdf.org/downloads.html). After you install it, then you can set the installation configuration as below and create the route to create the pdf.
+```py
+import pdfkit
 
+config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
+
+@app.route('/get_pdf/<invoice>', methods=['POST'])
+@login_required
+def get_pdf(invoice):
+    if current_user.is_authenticated:
+        grandTotal = 0
+        subTotal = 0
+        customer_id = current_user.id
+        if request.method =="POST":
+            customer = Register.query.filter_by(id=customer_id).first()
+            orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+            for _key, product in orders.orders.items():
+                discount = (product['discount']/100) * float(product['price'])
+                subTotal += float(product['price']) * int(product['quantity'])
+                subTotal -= discount
+                tax = ("%.2f" % (.06 * float(subTotal)))
+                grandTotal = float("%.2f" % (1.06 * subTotal))
+
+            rendered =  render_template('customer/pdf.html', invoice=invoice, tax=tax,grandTotal=grandTotal,customer=customer,orders=orders)
+            pdf = pdfkit.from_string(rendered, False, configuration=config)
+            response = make_response(pdf)
+            response.headers['content-Type'] ='application/pdf'
+            response.headers['content-Disposition'] ='inline; filename='+invoice+'.pdf'
+            return response
+    return request(url_for('orders'))
+```
+Then create html template which will be used to create the pdf report as `pdf.html`. In here we will copy the template from bootstrap and change the content with the html page in `order.py`
+```html
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <title>Get pdf</title>
+    </head>
+    <body>
+        <div class="container mt-4">
+            {% include '_messages.html' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <b style="float: right;">Inoice: {{orders.invoice}} </b> 
+                    <br>
+                    Status: {{orders.status}}
+                    <br>
+                    Customer name: {{customer.name}}
+                    <br>
+                    Customer email: {{customer.email}}
+                    <br>
+                    Customer contact: {{customer.contact}}
+                    <br>
+                    <br>
+                    <table class="table table-sm">
+                        <thead>
+                            <th>Sr</th>
+                            <th>Name</th>
+                            <th>Color</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Discount</th>
+                            <th>Subtotal</th>
+                        </thead>
+                        <tbody>
+                            {% for key, product in orders.orders.items() %}
+                            {% set discount =(product.discount/100) * product.price|float %}
+                            <tr>
+                                <td>{{loop.index}}</td>
+                                <td>{{product.name}}</td>
+                                <form action="{{url_for('updatecart', code=key)}}" method="post">
+                                    <td>{{product.color|capitalize}}</td>
+                                    <td>${{"%.2f"|format(product.price)}}</td>
+                                    <td> {{product.quantity}} </td>
+                                    {% if product.discount  %}
+                                    <td>{{product.discount}} % &nbsp; &nbsp; is {{"%.2f"|format(discount)}}</td>
+                                    {% else %}
+                                    <td></td>
+                                    {% endif %}
+                                    {% set subtotal = product.quantity|int * product.price|float  %}
+                                    <td>${{"%.2f"|format(subtotal - discount|round(1,'floor')) }}</td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table table-sm">
+                        <tr>
+                            <td width="35%"></td>
+                            <td> <h5>Tax: ${{tax}}</h5></td>
+                            <td> <h5>Grand total: ${{grandTotal}}</h3> </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
+```
 ### **39. How to integrate stripe payment**
+If you want to remove un wanted details in your shopping cart, then you need to create the `updateshoppingcart`.
+```py
+def updateshoppingcart():
+    for key, shopping in session['Shoppingcart'].items():
+        session.modified = True
+        del shopping['image']
+        del shopping['colors']
+    return updateshoppingcart
+
+@app.route('/getorder')
+@login_required
+def get_order():
+    if current_user.is_authenticated:
+        customer_id = current_user.id
+        invoice = secrets.token_hex(5)
+        updateshoppingcart()
+        try:
+            order = CustomerOrder(invoice=invoice,customer_id=customer_id,orders=session['Shoppingcart'])
+            db.session.add(order)
+            db.session.commit()
+            session.pop('Shoppingcart')
+            flash('Your order has been sent successfully','success')
+            return redirect(url_for('orders',invoice=invoice))
+        except Exception as e:
+            print(e)
+            flash('Some thing went wrong while get order', 'danger')
+            return redirect(url_for('getCart'))
+```
+Then, if you going to create payment methods, you can use stripe payment. First of all, you need to create the stripe account
+```
+Username : miftahcoiri354@gmail.com
+Password : ************!
+```
+And get the API Key.
+```py
+API_KEY = 'pk_test_51IMTTWJQmm6jcGJWGDhEm4RVn3BRl14W7p6XBSjBa7v64qtv5AibOQIWX3ZyEurdklaGr6xRJHd3eFLsdjlQVFK500kcNPqmnw'
+```
+And go to google and search the `stripe documentation`, and find the [`Stripe Checkout`](https://stripe.com/docs/payments/checkout). Go to migrate from [`accept payment`](https://stripe.com/docs/payments/accept-a-payment?integration=checkout) and get the Client-Side Code.
+```py
+# This example sets up an endpoint using the Flask framework.
+# Watch this video to get started: https://youtu.be/7Ul1vfmsDck.
+
+import os
+import stripe
+
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+stripe.api_key = 'sk_test_51IMTTWJQmm6jcGJWiyAgTfiuuDbS1X2pedg7bdT2ny5Us4lHwwOCpoLHrBnfAGXNPGZC6qpx3iVG0VS3jpFyIqQd00dHJj9HvW'
+
+@app.route('/create-checkout-session', methods=['POST'])
+def create_checkout_session():
+  session = stripe.checkout.Session.create(
+    payment_method_types=['card'],
+    line_items=[{
+      'price_data': {
+        'currency': 'usd',
+        'product_data': {
+          'name': 'T-shirt',
+        },
+        'unit_amount': 2000,
+      },
+      'quantity': 1,
+    }],
+    mode='payment',
+    success_url='https://example.com/success',
+    cancel_url='https://example.com/cancel',
+  )
+
+  return jsonify(id=session.id)
+
+if __name__== '__main__':
+    app.run(port=4242)
+```
+```html
+<html>
+  <head>
+    <title>Buy cool new product</title>
+  </head>
+  <body>
+    <button id="checkout-button">Checkout</button>
+
+    <script type="text/javascript">
+      // Create an instance of the Stripe object with your publishable API key
+      var stripe = Stripe('pk_test_51IMTTWJQmm6jcGJWGDhEm4RVn3BRl14W7p6XBSjBa7v64qtv5AibOQIWX3ZyEurdklaGr6xRJHd3eFLsdjlQVFK500kcNPqmnw');
+      var checkoutButton = document.getElementById('checkout-button');
+
+      checkoutButton.addEventListener('click', function() {
+        // Create a new Checkout Session using the server-side endpoint you
+        // created in step 3.
+        fetch('/create-checkout-session', {
+          method: 'POST',
+        })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(session) {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function(result) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, you should display the localized error message to your
+          // customer using `error.message`.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
+      });
+    </script>
+  </body>
+</html>
+```
+In here, you already implement the payment, and just go to the `customer/order.html`
+```html
+<!-- customer/order.html -->
+                    <td>
+                        {% if orders.status =='Paid' %}
+                        {% else %}
+                        <form action="#" method="POST">
+                            {% set amount =  grandTotal.replace('.','') %}
+                            <input type="hidden" name="amount" value="{{amount}}">
+                            <input type="hidden" name="invoice" value="{{orders.invoice}}">
+                            <script src="https://checkout.stripe.com/checkout.js"
+                            class="stripe-button"
+                            data-key="pk_test_MaILxTYQ15v5Uhd6NKI9wPdD00qdL0QZSl"
+                            data-name="{{customer.name}}"
+                            data-description="myshop parchase"
+                            data-amount="{{amount}}"
+                            data-currency="idr">
+                            </script>
+                        </form>
+                        {% endif %}
+                    </td>
+                    <td width="50%"></td>
+                    <td> <h5>Tax: ${{tax}}</h5></td>
+                    <td> <h5>Grand total: ${{grandTotal}}</h3> </td>
+```
+Then you can create the payment route using the following script.
+```py
+import stripe
+
+buplishable_key ='pk_test_MaILxTYQ15v5Uhd6NKI9wPdD00qdL0QZSl'
+stripe.api_key ='sk_test_9JlhVB6qwjcRdYzizjdwgIo0Dt00N55uxbWy'
+
+@app.route('/payment',methods=['POST'])
+def payment():
+    invoice = request.form.get('invoice')
+    amount = request.form.get('amount')
+    customer = stripe.Customer.create(
+      email=request.form['stripeEmail'],
+      source=request.form['stripeToken'],
+    )
+    charge = stripe.Charge.create(
+      customer=customer.id,
+      description='Myshop',
+      amount=amount,
+      currency='usd',
+    )
+    orders =  CustomerOrder.query.filter_by(customer_id = current_user.id,invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+    orders.status = 'Paid'
+    db.session.commit()
+    return redirect(url_for('thanks'))
+
+@app.route('/thanks')
+def thanks():
+    return render_template('customer/thank.html')
+```
+The last fix these 2 template in html file
+```html
+<!-- customer/order.html -->
+<table class="table table-sm">
+                <tr>
+                    <td>
+                        {% if orders.status =='Paid' %}
+                        {% else %}
+                        <form action="{{url_for('payment')}}" method="POST">
+                            {% set amount =  grandTotal.replace('.','') %}
+```
+```html
+<!-- customer/thank.html -->
+<h1>Thank you shopping with us! </h1>
+```
+Last but not least, check if the payment success. Try to use the following default account
+```
+email   : miftahcoiri354@gmail.com
+credit  : 4242 4242 4242 4242
+expired : 08/23
+CCV     : 234
+```

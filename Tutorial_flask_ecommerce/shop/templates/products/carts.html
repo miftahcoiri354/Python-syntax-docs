@@ -5,7 +5,7 @@
 
 {% include '_navbar.html' %}
 <div class="container mt-4">
-    {% include '_messages.html' %}
+    {% include "_messages.html" %}
     <div class="row">
         <div class="col-md-12">
         <table class="table table-sm">
@@ -58,7 +58,7 @@
         </table>
         <table class="table table-sm">
             <tr>
-                <td> <a href="#" class="btn btn-success"> Order now </a> </td>
+                <td> <a href="{{url_for('get_order')}}" class="btn btn-success"> Order now </a> </td>
                 <td width="35%"></td>
                 <td> <h5>Tax: ${{tax}}</h5></td>
                 <td> <h5>Grand total: ${{grandtotal}}</h3> </td>

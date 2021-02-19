@@ -16,7 +16,7 @@ class Addproduct(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'),nullable=False)
     category = db.relationship('Category',backref=db.backref('categories', lazy=True))
 
-    brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'),nullable=True)
+    brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'),nullable=False)
     brand = db.relationship('Brand',backref=db.backref('brands', lazy=True))
 
     image_1 = db.Column(db.String(150), nullable=False, default='image1.jpg')
